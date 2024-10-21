@@ -11,8 +11,8 @@ namespace WpfParser.ViewModels
     {
 
         #region FileName
-        private string _FileName = "Анализ статистики CV19";
-        /// <summary>Title wiwndow</summary>
+        private string _FileName;
+        /// <summary>Имя Xml файла</summary>
         public string FileName
         {
             get => _FileName;

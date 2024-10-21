@@ -33,6 +33,7 @@ namespace WpfParser.Services
                     {
                         numberRecipient++;
                         file.ReportToRecipient.Add(new ReportToRecipientViewModel());
+                        file.ReportToRecipient[numberRecipient].Payment = new Payment();
                     }
 
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодРайона")
@@ -55,32 +56,38 @@ namespace WpfParser.Services
                         file.ReportToRecipient[numberRecipient].Name = reader.ReadElementContentAsString();
                     }
 
-                    ;
+                    
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "Отчество")
                     {
                         file.ReportToRecipient[numberRecipient].Patronymic = reader.ReadElementContentAsString();
                     }
 
-                    ;
+                    
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаСмерти")
                     {
                         file.ReportToRecipient[numberRecipient].DateOfDeath = reader.ReadElementContentAsString();
                     }
 
-                    ;
+                    
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "ОтзываемаяСумма")
                     {
                         file.ReportToRecipient[numberRecipient].SumRecalled = reader.ReadElementContentAsString();
                     }
 
-                    ;
+                    
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодНевозврата")
                     {
                         file.ReportToRecipient[numberRecipient].CodeNoReturn = reader.ReadElementContentAsString();
                     }
 
-                    ;
-
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаНачалаПериода")
+                    {
+                        file.ReportToRecipient[numberRecipient].Payment.StartDateOfPeriod = reader.ReadElementContentAsString();
+                    }
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаКонцаПериода")
+                    {
+                        file.ReportToRecipient[numberRecipient].Payment.EndDateOfPeriod = reader.ReadElementContentAsString();
+                    }
 
                 }
             }

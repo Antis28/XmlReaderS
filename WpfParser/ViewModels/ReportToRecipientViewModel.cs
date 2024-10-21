@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using WpfParser.Models;
 using WpfParser.ViewModels.Base;
 
 namespace WpfParser.ViewModels
@@ -37,6 +38,8 @@ namespace WpfParser.ViewModels
         /// ДатаСмерти
         /// </summary>
         public string DateOfDeath { get; set; }
+
+        public Payment Payment {get; set; }
 
         public string Surname { get; set; }
         public string Name { get; set; }

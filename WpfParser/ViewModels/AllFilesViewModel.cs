@@ -18,7 +18,16 @@ namespace WpfParser.ViewModels
 {
     internal class AllFilesViewModel : ViewModel
     {
-        public ObservableCollection<ResponseFileViewModel> ResponseFiles { get; private set; }
+        
+        #region IsOnlyDck : bool - Отображать только Dck
+        ///<summary>Отображать только Dck</summary>
+        private IEnumerable<ResponseFileViewModel> _ResponseFiles ;
+        ///<summary>Отображать только Dck</summary>
+        public IEnumerable<ResponseFileViewModel> ResponseFiles { get => _ResponseFiles; set => Set(ref _ResponseFiles, value); }
+        #endregion
+
+
+
 
         #region SelectedFile : ResponseFileViewModel - Выбранный файл xml
         ///<summary>Выбранная группа</summary>
@@ -29,7 +38,7 @@ namespace WpfParser.ViewModels
 
         #region IsOnlyDck : bool - Отображать только Dck
         ///<summary>Отображать только Dck</summary>
-        private bool _IsOnlyDck = false;
+        private bool _IsOnlyDck = true;
         ///<summary>Отображать только Dck</summary>
         public bool IsOnlyDck { get => _IsOnlyDck; set => Set(ref _IsOnlyDck, value); } 
         #endregion
@@ -43,11 +52,16 @@ namespace WpfParser.ViewModels
 
         private void OnOnlyDckCommandExecuted(object p)
         {
+            OnlyDckFiltred();
+        }
+
+        private void OnlyDckFiltred()
+        {
             if (IsOnlyDck)
             {
                 foreach (var file in ResponseFiles)
                 {
-                    var indEnd = file.FileName.IndexOf("-DOC-", StringComparison.InvariantCultureIgnoreCase);
+                    var indEnd = file.FileName.IndexOf("-001-DOC-", StringComparison.InvariantCultureIgnoreCase);
                     file.FileName = file.FileName.Remove(indEnd);
                     var indStart = file.FileName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
                     file.FileName = file.FileName.Remove(0, indStart+1);
@@ -59,6 +73,7 @@ namespace WpfParser.ViewModels
                 ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
             }
         }
+
         #endregion
 
         #endregion
@@ -75,6 +90,7 @@ namespace WpfParser.ViewModels
 
             var rf = DataService.ReadResponseFiles();
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+            OnlyDckFiltred();
         }
     }
 }

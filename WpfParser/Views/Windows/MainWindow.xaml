@@ -54,14 +54,14 @@
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <CheckBox VerticalAlignment="Top"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="Только Дик код"  ></CheckBox>
-                            <ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding ResponseFiles }"
+                                <CheckBox VerticalAlignment="Top"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="Только DCK код"  ></CheckBox>
+                            <ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding ResponseFiles, Mode=TwoWay }"
                                      SelectedItem="{Binding SelectedFile}"
                                      SelectedIndex="0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding FileName, Mode=OneWay}" />
+                                            <TextBlock Text="{Binding FileName, Mode=TwoWay}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -71,24 +71,6 @@
                         <GroupBox Grid.Column="1" Header="{Binding SelectedFile.FileName, 
                                                             FallbackValue='Содержимое xml', 
                                                             TargetNullValue='Группа не выбрана'}">
-                            <!--<ListBox ItemsSource="{Binding SelectedFile.ReportToRecipient, Mode=OneWay}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                        <UniformGrid>
-                                            <TextBlock Text="Snils" Margin="5,0"/>
-                                            <TextBox Text="{Binding Snils}"/>
-                                            <TextBlock Text="ФИО" Margin="5,0"/>
-                                            <StackPanel Orientation="Horizontal" Margin="3">
-                                                <TextBlock Text="{Binding Surname}"  Margin="3"/>
-                                                <TextBlock Text="{Binding Name}"  Margin="3"/>
-                                                <TextBlock Text="{Binding Patronymic}"  Margin="3"/>
-                                            </StackPanel>
-                                            <TextBlock Text="Код невозврата" Margin="5,0"/>
-                                            <TextBox Text="{Binding CodeNoReturn}"/>
-                                        </UniformGrid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>-->
                             <DataGrid ItemsSource="{Binding SelectedFile.ReportToRecipient}" 
                                       AutoGenerateColumns="False" 
                                       CanUserAddRows="False"
@@ -97,6 +79,7 @@
                                       AlternatingRowBackground="LightGray"
                                       FontSize="16">
                                 <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
@@ -114,9 +97,18 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
+                                    <DataGridTemplateColumn Header="Период" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <TextBlock>
+                                                    <Run Text="{Binding Payment.StartDateOfPeriod}"/>
+                                                    <Run Text="-"/>
+                                                    <Run Text="{Binding Payment.EndDateOfPeriod}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                                    <DataGridTextColumn Header="Заметки" Binding="{Binding Description}"  Width="*" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </GroupBox>
