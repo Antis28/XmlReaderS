@@ -16,7 +16,7 @@ namespace WpfParser.Services
         {
             var file = new ResponseFileViewModel
             {
-                ReportToRecipient = new List<ReportToRecipient>()
+                ReportToRecipient = new List<ReportToRecipientViewModel>()
             };
 
             using (XmlReader reader = XmlReader.Create(path))
@@ -32,7 +32,7 @@ namespace WpfParser.Services
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "ОтчетПоПолучателю")
                     {
                         numberRecipient++;
-                        file.ReportToRecipient.Add(new ReportToRecipient());
+                        file.ReportToRecipient.Add(new ReportToRecipientViewModel());
                     }
 
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодРайона")

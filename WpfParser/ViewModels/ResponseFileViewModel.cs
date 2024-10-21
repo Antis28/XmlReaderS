@@ -10,7 +10,7 @@ namespace WpfParser.ViewModels
     internal class ResponseFileViewModel : ViewModel
     {
         public string FileName { get; set; }
-        public IList<ReportToRecipient> ReportToRecipient { get; set; }
+        public IList<ReportToRecipientViewModel> ReportToRecipient { get; set; }
         
     }
 }

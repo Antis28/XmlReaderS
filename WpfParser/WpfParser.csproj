@@ -79,7 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Payment.cs" />
-    <Compile Include="Models\ReportToRecipient.cs" />
+    <Compile Include="ViewModels\ReportToRecipientViewModel.cs" />
     <Compile Include="ViewModels\ResponseFileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

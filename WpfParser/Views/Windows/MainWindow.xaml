@@ -61,19 +61,57 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </GroupBox>
-                        <GroupBox Grid.Column="1" Header="Файлы">
-                            <ListBox ItemsSource="{Binding SelectedXml.Files, Mode=OneWay}">
+                        <GroupBox Grid.Column="1" Header="{Binding SelectedFile.FileName, 
+                                                            FallbackValue='Содержимое xml', 
+                                                            TargetNullValue='Группа не выбрана'}">
+                            <!--<ListBox ItemsSource="{Binding SelectedFile.ReportToRecipient, Mode=OneWay}">
                                 <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type vm:FileViewModel}">
+                                    <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
                                         <UniformGrid>
-                                            <TextBlock Text="Имя файла" Margin="5,0"/>
-                                            <TextBlock Text="{Binding Name}"></TextBlock>
-                                            <TextBlock Text="Создан" Margin="5,0"/>
-                                            <TextBlock Text="{Binding CreationDate}"></TextBlock>
+                                            <TextBlock Text="Snils" Margin="5,0"/>
+                                            <TextBox Text="{Binding Snils}"/>
+                                            <TextBlock Text="ФИО" Margin="5,0"/>
+                                            <StackPanel Orientation="Horizontal" Margin="3">
+                                                <TextBlock Text="{Binding Surname}"  Margin="3"/>
+                                                <TextBlock Text="{Binding Name}"  Margin="3"/>
+                                                <TextBlock Text="{Binding Patronymic}"  Margin="3"/>
+                                            </StackPanel>
+                                            <TextBlock Text="Код невозврата" Margin="5,0"/>
+                                            <TextBox Text="{Binding CodeNoReturn}"/>
                                         </UniformGrid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
-                            </ListBox>
+                            </ListBox>-->
+                            <DataGrid ItemsSource="{Binding SelectedFile.ReportToRecipient}" 
+                                      AutoGenerateColumns="False" 
+                                      CanUserAddRows="False"
+                                      GridLinesVisibility="Vertical"
+                                      VerticalGridLinesBrush="DarkGray"
+                                      AlternatingRowBackground="LightGray"
+                                      FontSize="16">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
+                                    <DataGridTemplateColumn Header="СНИЛС">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <TextBox Text="{Binding Snils}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Код невозврата">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <TextBox Text="{Binding CodeNoReturn}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
+
+                                    <DataGridTextColumn Header="Заметки" Binding="{Binding Description}"  Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </GroupBox>
                     </Grid>
                 </TabItem>

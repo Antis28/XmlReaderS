@@ -4,13 +4,14 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using WpfParser.ViewModels.Base;
 
-namespace WpfParser.Models
+namespace WpfParser.ViewModels
 {
     /// <summary>
     /// Отчет По Получателю
     /// </summary>
-    internal class ReportToRecipient
+    internal class ReportToRecipientViewModel : ViewModel
     {
         /// <summary>
         /// Код района
