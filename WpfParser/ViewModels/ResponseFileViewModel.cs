@@ -9,7 +9,16 @@ namespace WpfParser.ViewModels
     /// </summary>
     internal class ResponseFileViewModel : ViewModel
     {
-        public string FileName { get; set; }
+
+        #region FileName
+        private string _FileName = "Анализ статистики CV19";
+        /// <summary>Title wiwndow</summary>
+        public string FileName
+        {
+            get => _FileName;
+            set => Set(ref _FileName, value);
+        }
+        #endregion
         public IList<ReportToRecipientViewModel> ReportToRecipient { get; set; }
         
     }

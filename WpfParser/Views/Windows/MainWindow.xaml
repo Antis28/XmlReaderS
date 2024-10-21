@@ -49,17 +49,24 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <GroupBox Grid.Column="0" Header="Файл:">
-                            <ListBox ItemsSource="{Binding ResponseFiles }"
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <CheckBox VerticalAlignment="Top"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="Только Дик код"  ></CheckBox>
+                            <ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding ResponseFiles }"
                                      SelectedItem="{Binding SelectedFile}"
                                      SelectedIndex="0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding FileName}" />
+                                            <TextBlock Text="{Binding FileName, Mode=OneWay}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+                            </Grid>
                         </GroupBox>
                         <GroupBox Grid.Column="1" Header="{Binding SelectedFile.FileName, 
                                                             FallbackValue='Содержимое xml', 
