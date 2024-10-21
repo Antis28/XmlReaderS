@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,13 +16,43 @@ namespace ConsoleReaderXML
             "OUT-700-Y-2024-ORG-093-009-000003-DIS-053-DCK-90405-001-DOC-ONVZ-FSB-8458-OUTNMB-0000261095.XML";
         static void Main(string[] args)
         {
-            var file = new ResponseFile();
-            file.ReportToRecipient = new List<ReportToRecipient>();
+            var t =Directory.GetFiles(Environment.CurrentDirectory,"*.xml");
+            var files = new List<ResponseFile>();
+            foreach (var xmlFile in t)
+            {
+                var file = ReadResponseFile(xmlFile);
+                files.Add(file);
+            }
 
-            using (XmlReader reader = XmlReader.Create(_path))
+            foreach (var file in files)
+            {
+                Console.WriteLine(file.FileName);
+                foreach (var item in file.ReportToRecipient)
+                {
+                    Console.WriteLine(new string('-', 80));
+                    Console.WriteLine(item.AreaCode);
+                    Console.WriteLine(item.Snils);
+                    Console.WriteLine(item.Surname);
+                    Console.WriteLine(item.Name);
+                    Console.WriteLine(item.Patronymic);
+                    Console.WriteLine(item.CodeNoReturn);
+
+                    Console.WriteLine(new string('-', 80));
+                }
+            }
+        }
+
+        private static ResponseFile ReadResponseFile(string path)
+        {
+            var file = new ResponseFile
+            {
+                ReportToRecipient = new List<ReportToRecipient>()
+            };
+
+            using (XmlReader reader = XmlReader.Create(path))
             {
                 var numberRecipient = -1; //номер ОтчетПоПолучателю
-                while (reader.Read()) // чтение некст элемента
+                while (reader.Read())     // чтение некст элемента
                 {
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "ИмяФайла")
                     {
@@ -68,22 +99,9 @@ namespace ConsoleReaderXML
 
 
                 }
-                // Console.WriteLine(reader.ReadElementContentAsString()); // читаем содержимое элемента <name>
             }
-            Console.WriteLine(file.FileName);
 
-            foreach (var item in file.ReportToRecipient)
-            {
-                Console.WriteLine(new string('-', 80));
-                Console.WriteLine(item.AreaCode);
-                Console.WriteLine(item.Snils);
-                Console.WriteLine(item.Surname);
-                Console.WriteLine(item.Name);
-                Console.WriteLine(item.Patronymic);
-                Console.WriteLine(item.CodeNoReturn);
-
-                Console.WriteLine(new string('-', 80));
-            }
+            return file;
         }
     }
 }
