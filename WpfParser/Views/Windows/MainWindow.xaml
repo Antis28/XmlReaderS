@@ -9,8 +9,8 @@
         xmlns:models="clr-namespace:WpfParser.Models"
         xmlns:ext="clr-namespace:WpfParser.Views.Extended"
         xmlns:cmd="clr-namespace:WpfParser.Infrastructure.Commands"
-        
-        Title="MainWindow" Height="450" Width="800">
+        FontSize="16"
+        Title="MainWindow" Height="450" Width="1100">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -23,19 +23,27 @@
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
+                <Menu.DataContext>
+                    <vm:AllFilesViewModel/>
+                </Menu.DataContext>
                 <MenuItem Header="Файл">
                     <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                 </MenuItem>
+                <!--<MenuItem Header="Редактировать">
+                    <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
+                </MenuItem>-->
+
+
                 <MenuItem Header="Помощь">
                     <MenuItem Header="О программе" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                 </MenuItem>
             </Menu>
-            <StatusBar DockPanel.Dock="Bottom">
+            <StatusBar DockPanel.Dock="Bottom" Height="10">
                 <StatusBarItem >
-                    <TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>
+                    <!--<TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>-->
                 </StatusBarItem>
                 <StatusBarItem >
-                    <ProgressBar Width="120" Height="14" Value="30"/>
+                    <!--<ProgressBar Width="120" Height="14" Value="30"/>-->
                 </StatusBarItem>
             </StatusBar>
             <TabControl>
@@ -45,7 +53,8 @@
                     </TabItem.DataContext>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="280"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <GroupBox Grid.Column="0" Header="Файл:">
@@ -54,21 +63,28 @@
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <CheckBox VerticalAlignment="Top"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="Только DCK код"  ></CheckBox>
-                            <ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding ResponseFiles, Mode=TwoWay }"
+                                <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
+                                    <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsAllVisible}" Command="{Binding AllVisibleCommand }" Content="Все"  ></RadioButton>
+                                    <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="Только DCK код"  ></RadioButton>
+                                    <RadioButton FontSize="12"  IsChecked="{Binding IsOnlyDis}" Command="{Binding OnlyDisCommand }" Content="Только район"  ></RadioButton>
+                                </StackPanel>
+
+                                <ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding ResponseFiles, Mode=TwoWay }"
                                      SelectedItem="{Binding SelectedFile}"
                                      SelectedIndex="0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding FileName, Mode=TwoWay}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding FileName, Mode=TwoWay}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Grid.Column="1" Header="{Binding SelectedFile.FileName, 
+                        <GridSplitter Grid.Column="1" ResizeDirection="Columns" ShowsPreview="False" Width="3" 
+                                      HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                        <GroupBox Grid.Column="2" Header="{Binding SelectedFile.FileName, 
                                                             FallbackValue='Содержимое xml', 
                                                             TargetNullValue='Группа не выбрана'}">
                             <DataGrid ItemsSource="{Binding SelectedFile.ReportToRecipient}" 
@@ -77,7 +93,7 @@
                                       GridLinesVisibility="Vertical"
                                       VerticalGridLinesBrush="DarkGray"
                                       AlternatingRowBackground="LightGray"
-                                      FontSize="16">
+                                      >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
@@ -114,7 +130,7 @@
                         </GroupBox>
                     </Grid>
                 </TabItem>
-                
+
             </TabControl>
         </DockPanel>
     </Grid>
