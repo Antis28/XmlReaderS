@@ -1,0 +1,84 @@
+﻿<Window x:Class="WpfParser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfParser"
+        mc:Ignorable="d"
+        xmlns:vm="clr-namespace:WpfParser.ViewModels"
+        xmlns:models="clr-namespace:WpfParser.Models"
+        xmlns:ext="clr-namespace:WpfParser.Views.Extended"
+        xmlns:cmd="clr-namespace:WpfParser.Infrastructure.Commands"
+        
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="FontSize" Value="16"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Файл">
+                    <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Помощь">
+                    <MenuItem Header="О программе" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
+                </MenuItem>
+            </Menu>
+            <StatusBar DockPanel.Dock="Bottom">
+                <StatusBarItem >
+                    <TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>
+                </StatusBarItem>
+                <StatusBarItem >
+                    <ProgressBar Width="120" Height="14" Value="30"/>
+                </StatusBarItem>
+            </StatusBar>
+            <TabControl>
+                <TabItem Header="Файлы отзывов">
+                    <TabItem.DataContext>
+                        <vm:AllFilesViewModel/>
+                    </TabItem.DataContext>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Grid.Column="0" Header="Файл:">
+                            <ListBox ItemsSource="{Binding ResponseFiles }"
+                                     SelectedItem="{Binding SelectedFile}"
+                                     SelectedIndex="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding FileName}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+                        <GroupBox Grid.Column="1" Header="Файлы">
+                            <ListBox ItemsSource="{Binding SelectedXml.Files, Mode=OneWay}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:FileViewModel}">
+                                        <UniformGrid>
+                                            <TextBlock Text="Имя файла" Margin="5,0"/>
+                                            <TextBlock Text="{Binding Name}"></TextBlock>
+                                            <TextBlock Text="Создан" Margin="5,0"/>
+                                            <TextBlock Text="{Binding CreationDate}"></TextBlock>
+                                        </UniformGrid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
+                
+            </TabControl>
+        </DockPanel>
+    </Grid>
+</Window>
