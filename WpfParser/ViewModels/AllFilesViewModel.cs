@@ -18,17 +18,21 @@ namespace WpfParser.ViewModels
 {
     internal class AllFilesViewModel : ViewModel
     {
+        #region Список Отчет По Получателю
         ///<summary>Список Отчет По Получателю</summary>
         private IEnumerable<ResponseFileViewModel> _ResponseFiles ;
 
-        /// <summary>
-        /// Список имен файлов
-        /// </summary>
-        private IDictionary<string, int> _FileNames;
 
         ///<summary>Список Отчет По Получателю</summary>
         public IEnumerable<ResponseFileViewModel> ResponseFiles { get => _ResponseFiles; set => Set(ref _ResponseFiles, value); }
+        #endregion
        
+        /// <summary>
+        /// Список имен файлов
+        /// </summary>
+        private IDictionary<int, string> _FileNames;
+        public IDictionary<int, string> FileNames { get => _FileNames; set => Set(ref _FileNames, value); }
+
 
         #region SelectedFile : ResponseFileViewModel - Выбранный файл xml
         ///<summary>Выбранная группа</summary>
@@ -116,27 +120,55 @@ namespace WpfParser.ViewModels
             
             if (IsOnlyDis)
             {
+                FileNames.Clear();
+                var index = 0;
                 foreach (var file in ResponseFiles)
                 {
-                    var indEnd = file.FileName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
-                    file.FileName = file.FileName.Remove(indEnd);
-                    var indStart = file.FileName.IndexOf("-DIS-", StringComparison.InvariantCultureIgnoreCase);
-                    file.FileName = file.FileName.Remove(0, indStart +5);
+                    index++;
+
+                    var tempName = ExtractDckFromName(file);
+                    var tempName2 = ExtractDisFromName(file);
+                    file.FileName = $"{tempName2} - {tempName}";
+
+                    FileNames.Add(index, tempName);
                 }
             }
             if (IsOnlyDck)
             {
+                FileNames.Clear();
+                var index = 0;
                 foreach (var file in ResponseFiles)
                 {
-                    var indEnd = file.FileName.IndexOf("-001-DOC-", StringComparison.InvariantCultureIgnoreCase);
-                    file.FileName = file.FileName.Remove(indEnd);
-                    var indStart = file.FileName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
-                    file.FileName = file.FileName.Remove(0, indStart + 1);
+                    index++;
+                    var tempName = ExtractDckFromName(file);
+                    var tempName2 = ExtractDisFromName(file);
+                    file.FileName = $"{tempName} - Район: {tempName2}";
+                    FileNames.Add(index, tempName);
                 }
             }
             ResponseFiles = from item in ResponseFiles
                                 orderby item.FileName
                                 select item;
+        }
+
+        private static string ExtractDckFromName(ResponseFileViewModel file)
+        {
+            var tempName = file.FileName;
+            var indEnd = tempName.IndexOf("-001-DOC-", StringComparison.InvariantCultureIgnoreCase);
+            tempName = tempName.Remove(indEnd);
+            var indStart = tempName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
+            tempName = tempName.Remove(0, indStart + 1);
+            return tempName;
+        }
+
+        private static string ExtractDisFromName(ResponseFileViewModel file)
+        {
+            var tempName = file.FileName;
+            var indEnd = tempName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
+            tempName = tempName.Remove(indEnd);
+            var indStart = tempName.IndexOf("-DIS-", StringComparison.InvariantCultureIgnoreCase);
+            tempName = tempName.Remove(0, indStart +5);
+            return tempName;
         }
 
         #endregion
@@ -158,6 +190,7 @@ namespace WpfParser.ViewModels
 
             var rf = DataService.ReadResponseFiles();
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+            _FileNames = new Dictionary<int, string>();
             CheckVisibleFileName();
         }
     }

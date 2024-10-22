@@ -53,7 +53,7 @@
                     </TabItem.DataContext>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="280"/>
+                            <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
@@ -65,8 +65,8 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
                                     <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsAllVisible}" Command="{Binding AllVisibleCommand }" Content="Все"  ></RadioButton>
-                                    <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="Только DCK код"  ></RadioButton>
-                                    <RadioButton FontSize="12"  IsChecked="{Binding IsOnlyDis}" Command="{Binding OnlyDisCommand }" Content="Только район"  ></RadioButton>
+                                    <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="DCK код"  ></RadioButton>
+                                    <RadioButton FontSize="12"  IsChecked="{Binding IsOnlyDis}" Command="{Binding OnlyDisCommand }" Content="Район"  ></RadioButton>
                                 </StackPanel>
 
                                 <ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding ResponseFiles, Mode=TwoWay }"
