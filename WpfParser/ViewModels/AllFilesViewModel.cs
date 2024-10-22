@@ -20,6 +20,12 @@ namespace WpfParser.ViewModels
     {
         ///<summary>Список Отчет По Получателю</summary>
         private IEnumerable<ResponseFileViewModel> _ResponseFiles ;
+
+        /// <summary>
+        /// Список имен файлов
+        /// </summary>
+        private IDictionary<string, int> _FileNames;
+
         ///<summary>Список Отчет По Получателю</summary>
         public IEnumerable<ResponseFileViewModel> ResponseFiles { get => _ResponseFiles; set => Set(ref _ResponseFiles, value); }
        
@@ -45,7 +51,7 @@ namespace WpfParser.ViewModels
         public bool IsOnlyDis { get => _IsOnlyDis; set => Set(ref _IsOnlyDis, value); }
         #endregion
 
-        #region IsAllVisible : bool - Отображать только все
+        #region IsAllVisible : bool - Отображать всё
         ///<summary>Отображать только все</summary>
         private bool _IsAllVisible = false;
         ///<summary>Отображать только все</summary>
@@ -92,7 +98,7 @@ namespace WpfParser.ViewModels
         }
         #endregion
 
-        #region CheckVisibleFileName
+        #region CheckVisibleFileNameCommand
 
         public ICommand CheckVisibleFileNameCommand { get; }
         private bool CanCheckVisibleFileNameCommandExecute(object p) => true;

@@ -40,10 +40,10 @@
             </Menu>
             <StatusBar DockPanel.Dock="Bottom" Height="10">
                 <StatusBarItem >
-                    <!--<TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>-->
+                    <TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>
                 </StatusBarItem>
                 <StatusBarItem >
-                    <!--<ProgressBar Width="120" Height="14" Value="30"/>-->
+                    <ProgressBar Width="120" Height="14" Value="30"/>
                 </StatusBarItem>
             </StatusBar>
             <TabControl>
@@ -95,23 +95,21 @@
                                       AlternatingRowBackground="LightGray"
                                       >
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="СНИЛС">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                <TextBox Text="{Binding Snils}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    
                                     <DataGridTemplateColumn Header="Код невозврата">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                <TextBox Text="{Binding CodeNoReturn}"/>
+                                                <TextBlock Text="{Binding CodeNoReturn}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <TextBox Text="{Binding CodeNoReturn}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Header="Период" Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -124,7 +122,19 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-
+                                    <DataGridTemplateColumn Header="СНИЛС">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <TextBlock Text="{Binding Snils}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <TextBox Text="{Binding Snils}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </GroupBox>
