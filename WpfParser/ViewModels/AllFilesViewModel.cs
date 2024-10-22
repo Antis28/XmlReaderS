@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using WpfParser.Infrastructure.Commands;
-using WpfParser.Models;
 using WpfParser.Services;
 using WpfParser.ViewModels.Base;
 
@@ -37,9 +33,67 @@ namespace WpfParser.ViewModels
         #region SelectedFile : ResponseFileViewModel - Выбранный файл xml
         ///<summary>Выбранная группа</summary>
         private ResponseFileViewModel _SelectedFile;
+
         ///<summary>Выбранная группа</summary>
-        public ResponseFileViewModel SelectedFile { get => _SelectedFile; set => Set(ref _SelectedFile, value); }
+        public ResponseFileViewModel SelectedFile
+        {
+            get => _SelectedFile;
+            set
+            {
+                if (!Set(ref _SelectedFile, value))return;
+
+                _SelectedXmlFile.Source = value?.ReportToRecipient;
+                OnPropertyChanged(nameof(SelectedXmlFile));
+            }
+        }
+
+        private readonly CollectionViewSource _SelectedXmlFile = new CollectionViewSource();
+        public ICollectionView SelectedXmlFile => _SelectedXmlFile?.View;
+
+       
+
+        #region PersonFilterText : string - Текст фильтра получателей
+        ///<summary>Текст фильтра получателей</summary>
+        private string _personFilterText;
+
+        ///<summary>Текст фильтра получателей</summary>
+        public string PersonFilterText
+        {
+            get => _personFilterText;
+            set
+            {
+                if(!Set(ref _personFilterText, value)) return;
+
+                _SelectedXmlFile.View.Refresh();
+            }
+        }
+
+        private void OnPersonFiltred(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is ReportToRecipientViewModel report))
+            {
+                e.Accepted = false;
+                return;
+            }
+            var filterText = _personFilterText;
+            if (string.IsNullOrEmpty(filterText)) return;
+            
+            if (report.Surname is null)
+            {
+                e.Accepted = false;
+                return;
+            }
+
+            if (report.Surname.ToLower().Contains(filterText.ToLower())) return;
+
+            e.Accepted = false;
+        }
         #endregion
+
+
+        #endregion
+
+
 
         #region IsOnlyDck : bool - Отображать только Dck
         ///<summary>Отображать только Dck</summary>
@@ -192,6 +246,10 @@ namespace WpfParser.ViewModels
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
             _FileNames = new Dictionary<int, string>();
             CheckVisibleFileName();
+
+            _SelectedXmlFile.Filter += OnPersonFiltred;
         }
+
+        
     }
 }

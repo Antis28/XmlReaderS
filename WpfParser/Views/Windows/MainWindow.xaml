@@ -9,6 +9,8 @@
         xmlns:models="clr-namespace:WpfParser.Models"
         xmlns:ext="clr-namespace:WpfParser.Views.Extended"
         xmlns:cmd="clr-namespace:WpfParser.Infrastructure.Commands"
+        
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         FontSize="16"
         Title="MainWindow" Height="450" Width="1100">
     <Window.DataContext>
@@ -87,56 +89,62 @@
                         <GroupBox Grid.Column="2" Header="{Binding SelectedFile.FileName, 
                                                             FallbackValue='Содержимое xml', 
                                                             TargetNullValue='Группа не выбрана'}">
-                            <DataGrid ItemsSource="{Binding SelectedFile.ReportToRecipient}" 
-                                      AutoGenerateColumns="False" 
-                                      CanUserAddRows="False"
-                                      GridLinesVisibility="Vertical"
-                                      VerticalGridLinesBrush="DarkGray"
-                                      AlternatingRowBackground="LightGray"
-                                      >
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
-                                    
-                                    <DataGridTemplateColumn Header="Код невозврата">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                <TextBlock Text="{Binding CodeNoReturn}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                        <DataGridTemplateColumn.CellEditingTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                <TextBox Text="{Binding CodeNoReturn}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellEditingTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Период" Width="*">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                <TextBlock>
-                                                    <Run Text="{Binding Payment.StartDateOfPeriod}"/>
-                                                    <Run Text="-"/>
-                                                    <Run Text="{Binding Payment.EndDateOfPeriod}"/>
-                                                </TextBlock>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="СНИЛС">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                <TextBlock Text="{Binding Snils}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                        <DataGridTemplateColumn.CellEditingTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                <TextBox Text="{Binding Snils}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellEditingTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                            <DockPanel>
+                                <DockPanel DockPanel.Dock="Top" Margin="3,0">
+                                    <fa:IconBlock Icon="Search" Margin="0,0,5,0"  Foreground="Red"/>
+                                    <TextBox Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DockPanel>
+                                <DataGrid ItemsSource="{Binding SelectedXmlFile}" 
+                                          AutoGenerateColumns="False" 
+                                          CanUserAddRows="False"
+                                          GridLinesVisibility="Vertical"
+                                          VerticalGridLinesBrush="DarkGray"
+                                          AlternatingRowBackground="LightGray"
+                                >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
+
+                                        <DataGridTemplateColumn Header="Код невозврата">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                    <TextBlock Text="{Binding CodeNoReturn}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                            <DataGridTemplateColumn.CellEditingTemplate>
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                    <TextBox Text="{Binding CodeNoReturn}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellEditingTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Период" Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                    <TextBlock>
+                         <Run Text="{Binding Payment.StartDateOfPeriod}"/>
+                         <Run Text="-"/>
+                         <Run Text="{Binding Payment.EndDateOfPeriod}"/>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="СНИЛС">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                    <TextBlock Text="{Binding Snils}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                            <DataGridTemplateColumn.CellEditingTemplate>
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                    <TextBox Text="{Binding Snils}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellEditingTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
                         </GroupBox>
                     </Grid>
                 </TabItem>
