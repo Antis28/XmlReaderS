@@ -16,13 +16,71 @@ namespace WpfParser.ViewModels
     {
         #region Список Отчет По Получателю
         ///<summary>Список Отчет По Получателю</summary>
-        private IEnumerable<ResponseFileViewModel> _ResponseFiles ;
+        private IEnumerable<ResponseFileViewModel> _ResponseFiles;
 
 
         ///<summary>Список Отчет По Получателю</summary>
-        public IEnumerable<ResponseFileViewModel> ResponseFiles { get => _ResponseFiles; set => Set(ref _ResponseFiles, value); }
+        public IEnumerable<ResponseFileViewModel> ResponseFiles
+        {
+            get => _ResponseFiles;
+            set
+            {
+                Set(ref _ResponseFiles, value);
+
+                //_SelectedXmlAllFiles.Source = value;
+               // OnPropertyChanged(nameof(SelectedXmlAllFiles));
+            }
+        }
+
         #endregion
-       
+
+        #region FileFilterText : string - Текст фильтра получателей во всех файлах
+        ///<summary>Текст фильтра получателей</summary>
+        private string _fileFilterText;
+
+        ///<summary>Текст фильтра получателей</summary>
+        public string FileFilterText
+        {
+            get => _fileFilterText;
+            set
+            {
+                if (!Set(ref _fileFilterText, value)) return;
+
+                _selectedFileFilterText.Source = value;
+                OnPropertyChanged(nameof(SelectedFileFilterText));
+            }
+        }
+
+        private void OnPersonFilterAllFiles(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is ResponseFileViewModel response))
+            {
+                e.Accepted = false;
+                return;
+            }
+            //ReportToRecipientViewModel
+            var filterText = _fileFilterText;
+            if (string.IsNullOrEmpty(filterText)) return;
+
+            var reports = response.ReportToRecipient;
+            foreach (var report in reports)
+            {
+                if (report.Surname is null)
+                {
+                    e.Accepted = false;
+                    return;
+                }
+
+                if (report.Surname.ToLower().Contains(filterText.ToLower())) return;
+
+                e.Accepted = false;
+            }
+        }
+
+        private readonly CollectionViewSource _selectedFileFilterText = new CollectionViewSource();
+        public ICollectionView SelectedFileFilterText => _selectedFileFilterText?.View;
+        #endregion
+
         /// <summary>
         /// Список имен файлов
         /// </summary>
@@ -31,26 +89,26 @@ namespace WpfParser.ViewModels
 
 
         #region SelectedFile : ResponseFileViewModel - Выбранный файл xml
-        ///<summary>Выбранная группа</summary>
+        ///<summary>Выбранный файл xml</summary>
         private ResponseFileViewModel _SelectedFile;
 
-        ///<summary>Выбранная группа</summary>
+        ///<summary>Выбранный файл xml</summary>
         public ResponseFileViewModel SelectedFile
         {
             get => _SelectedFile;
             set
             {
-                if (!Set(ref _SelectedFile, value))return;
+                if (!Set(ref _SelectedFile, value)) return;
 
-                _SelectedXmlFile.Source = value?.ReportToRecipient;
+                _selectedXmlFile.Source = value?.ReportToRecipient;
                 OnPropertyChanged(nameof(SelectedXmlFile));
             }
         }
 
-        private readonly CollectionViewSource _SelectedXmlFile = new CollectionViewSource();
-        public ICollectionView SelectedXmlFile => _SelectedXmlFile?.View;
+        private readonly CollectionViewSource _selectedXmlFile = new CollectionViewSource();
+        public ICollectionView SelectedXmlFile => _selectedXmlFile?.View;
 
-       
+
 
         #region PersonFilterText : string - Текст фильтра получателей
         ///<summary>Текст фильтра получателей</summary>
@@ -62,13 +120,13 @@ namespace WpfParser.ViewModels
             get => _personFilterText;
             set
             {
-                if(!Set(ref _personFilterText, value)) return;
+                if (!Set(ref _personFilterText, value)) return;
 
-                _SelectedXmlFile.View.Refresh();
+                _selectedXmlFile.View.Refresh();
             }
         }
 
-        private void OnPersonFiltred(object sender, FilterEventArgs e)
+        private void OnPersonFiltered(object sender, FilterEventArgs e)
         {
             if (!(e.Item is ReportToRecipientViewModel report))
             {
@@ -77,7 +135,7 @@ namespace WpfParser.ViewModels
             }
             var filterText = _personFilterText;
             if (string.IsNullOrEmpty(filterText)) return;
-            
+
             if (report.Surname is null)
             {
                 e.Accepted = false;
@@ -93,7 +151,7 @@ namespace WpfParser.ViewModels
 
         #endregion
 
-
+        #region Visible Files
 
         #region IsOnlyDck : bool - Отображать только Dck
         ///<summary>Отображать только Dck</summary>
@@ -114,13 +172,14 @@ namespace WpfParser.ViewModels
         private bool _IsAllVisible = false;
         ///<summary>Отображать только все</summary>
         public bool IsAllVisible { get => _IsAllVisible; set => Set(ref _IsAllVisible, value); }
+        #endregion 
         #endregion
 
         #region Commands
 
         #region OnlyDckCommand
 
-        public ICommand OnlyDckCommand { get; } 
+        public ICommand OnlyDckCommand { get; }
         private bool CanOnlyDckCommandExecute(object p) => true;
 
         private void OnOnlyDckCommandExecuted(object p)
@@ -140,7 +199,7 @@ namespace WpfParser.ViewModels
             CheckVisibleFileName();
         }
 
-        
+
 
 
         #endregion
@@ -171,7 +230,7 @@ namespace WpfParser.ViewModels
         {
             var rf = DataService.ReadResponseFiles();
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
-            
+
             if (IsOnlyDis)
             {
                 FileNames.Clear();
@@ -201,8 +260,8 @@ namespace WpfParser.ViewModels
                 }
             }
             ResponseFiles = from item in ResponseFiles
-                                orderby item.FileName
-                                select item;
+                            orderby item.FileName
+                            select item;
         }
 
         private static string ExtractDckFromName(ResponseFileViewModel file)
@@ -221,7 +280,7 @@ namespace WpfParser.ViewModels
             var indEnd = tempName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
             tempName = tempName.Remove(indEnd);
             var indStart = tempName.IndexOf("-DIS-", StringComparison.InvariantCultureIgnoreCase);
-            tempName = tempName.Remove(0, indStart +5);
+            tempName = tempName.Remove(0, indStart + 5);
             return tempName;
         }
 
@@ -247,9 +306,10 @@ namespace WpfParser.ViewModels
             _FileNames = new Dictionary<int, string>();
             CheckVisibleFileName();
 
-            _SelectedXmlFile.Filter += OnPersonFiltred;
+            _selectedXmlFile.Filter += OnPersonFiltered;
+            //_SelectedXmlAllFiles.Filter += OnPersonFilterAllFiles;
         }
 
-        
+
     }
 }
