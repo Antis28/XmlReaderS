@@ -20,10 +20,9 @@
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="FontSize" Value="16"></Setter>
         </Style>
-        
-        <vm:AllFilesViewModel x:Key="allXmlFiles"/>
+        <vm:AllFilesViewModel x:Key="AllXmlFiles"/>
     </Window.Resources>
-    <Grid DataContext="{StaticResource allXmlFiles }">
+    <Grid DataContext="{StaticResource AllXmlFiles }">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Файл">
@@ -74,7 +73,7 @@
                                          IsSynchronizedWithCurrentItem="True"
                                          ItemsSource="{Binding FileXmlCollection, Mode=OneWay }"
                                          SelectedItem="{Binding SelectedFile}"
-                                         SelectedIndex="0">
+                                         SelectedIndex="0" d:ItemsSource="{d:SampleData ItemCount=5}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
                                             <StackPanel Orientation="Horizontal">
@@ -108,31 +107,23 @@
                                     </StackPanel>
                                 </DockPanel>
                                 <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 
-                                          DataContext="{StaticResource allXmlFiles}"
+                                          DataContext="{StaticResource AllXmlFiles}"
                                           AutoGenerateColumns="False" 
                                           CanUserAddRows="False"
+                                          CanUserSortColumns ="true"
+                                          
                                           HorizontalScrollBarVisibility="Auto"
                                           GridLinesVisibility="Vertical"
                                           VerticalGridLinesBrush="DarkGray"
                                           AlternatingRowBackground="LightGray"
                                 >
                                     <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Код невозврата" Binding="{Binding CodeNoReturn}"  Width="Auto"  IsReadOnly="False"/>
                                         <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
 
-                                        <DataGridTemplateColumn Header="Код невозврата">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                    <TextBlock Text="{Binding CodeNoReturn}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                            <DataGridTemplateColumn.CellEditingTemplate>
-                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                    <TextBox Text="{Binding CodeNoReturn}"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellEditingTemplate>
-                                        </DataGridTemplateColumn>
+                                        
                                         <DataGridTemplateColumn Header="СНИЛС">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
@@ -156,7 +147,7 @@
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
-                                        <DataGridTemplateColumn Header="Счет" Width="*">
+                                        <DataGridTemplateColumn Header="Счет" Width="Auto">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
                                                     <TextBox Text="{Binding Payment.AccountNumber}"/>
