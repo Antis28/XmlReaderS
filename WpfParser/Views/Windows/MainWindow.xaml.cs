@@ -24,5 +24,10 @@ namespace WpfParser
         {
             InitializeComponent();
         }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            fileListBox.SelectedIndex = 0;
+        }
     }
 }

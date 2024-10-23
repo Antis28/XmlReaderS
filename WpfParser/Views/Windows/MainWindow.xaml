@@ -20,7 +20,7 @@
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="FontSize" Value="16"></Setter>
         </Style>
-        <vm:FilesViewModel x:Key="xmlFiles" />
+        
         <vm:AllFilesViewModel x:Key="allXmlFiles"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource allXmlFiles }">
@@ -70,7 +70,7 @@
                                     <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="DCK код"  ></RadioButton>
                                     <RadioButton FontSize="12"  IsChecked="{Binding IsOnlyDis}" Command="{Binding OnlyDisCommand }" Content="Район"  ></RadioButton>
                                 </StackPanel>
-                                <ListBox Grid.Row="2" VerticalAlignment="Stretch"
+                                <ListBox x:Name="fileListBox" Grid.Row="2" VerticalAlignment="Stretch"
                                          IsSynchronizedWithCurrentItem="True"
                                          ItemsSource="{Binding FileXmlCollection, Mode=OneWay }"
                                          SelectedItem="{Binding SelectedFile}"
@@ -98,7 +98,7 @@
                                     <TextBox 
                                         HorizontalAlignment="Left"
                                         Text="{Binding FilesFilterText, UpdateSourceTrigger=PropertyChanged}" 
-                                        Width="100"/>
+                                        Width="100" KeyUp="TextBox_KeyUp"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                         <fa:IconBlock Icon="Search" Margin="10,0,5,0"  Foreground="Red"/>
                                         <TextBlock Margin="5,0" Text="по списку"  HorizontalAlignment="Left"/>

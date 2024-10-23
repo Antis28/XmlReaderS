@@ -67,6 +67,7 @@ namespace WpfParser.ViewModels
             var filterText = _filesFilterText;
             if (string.IsNullOrEmpty(filterText)) return;
 
+            
             var reports = response.ReportToRecipient;
             foreach (var report in reports)
             {
@@ -77,10 +78,8 @@ namespace WpfParser.ViewModels
                 }
 
                 if (report.Surname.ToLower().Contains(filterText.ToLower())) return;
-
-                e.Accepted = false;
             }
-            
+            e.Accepted = false;
         }
         #endregion
 
