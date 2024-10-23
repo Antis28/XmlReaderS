@@ -88,6 +88,12 @@ namespace WpfParser.Services
                     {
                         file.ReportToRecipient[numberRecipient].Payment.EndDateOfPeriod = reader.ReadElementContentAsString();
                     }
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "НомерСчета")
+                    {
+                        file.ReportToRecipient[numberRecipient].Payment.AccountNumber = reader.ReadElementContentAsString();
+                    }
+
+                    
 
                 }
             }

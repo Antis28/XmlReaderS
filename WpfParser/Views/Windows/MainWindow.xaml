@@ -108,6 +108,7 @@
                                     </StackPanel>
                                 </DockPanel>
                                 <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 
+                                          DataContext="{StaticResource allXmlFiles}"
                                           AutoGenerateColumns="False" 
                                           CanUserAddRows="False"
                                           HorizontalScrollBarVisibility="Auto"
@@ -132,17 +133,6 @@
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellEditingTemplate>
                                         </DataGridTemplateColumn>
-                                        <DataGridTemplateColumn Header="Период" Width="*">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
-                                                    <TextBlock>
-                         <Run Text="{Binding Payment.StartDateOfPeriod}"/>
-                         <Run Text="-"/>
-                         <Run Text="{Binding Payment.EndDateOfPeriod}"/>
-                                                    </TextBlock>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
                                         <DataGridTemplateColumn Header="СНИЛС">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
@@ -155,7 +145,24 @@
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellEditingTemplate>
                                         </DataGridTemplateColumn>
-                                        <DataGridTextColumn Header="Код района" Binding="{Binding AreaCode}" IsReadOnly="True"/>
+                                        <DataGridTemplateColumn Header="Период">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                    <TextBlock>
+                                                        <Run Text="{Binding Payment.StartDateOfPeriod}"/>
+                                                        <Run Text="-"/>
+                                                        <Run Text="{Binding Payment.EndDateOfPeriod}"/>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Счет" Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                    <TextBox Text="{Binding Payment.AccountNumber}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </DockPanel>

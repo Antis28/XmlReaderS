@@ -26,6 +26,10 @@ namespace WpfParser.Models
         /// </summary>
         public string TypeOfPayment { get; set; }
 
-       
+        /// <summary>
+        /// Номер Счета 
+        /// </summary>
+        public string AccountNumber { get; set; }
+
     }
 }
