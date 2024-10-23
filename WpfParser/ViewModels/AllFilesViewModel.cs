@@ -14,40 +14,45 @@ namespace WpfParser.ViewModels
 {
     internal class AllFilesViewModel : ViewModel
     {
-        #region Список Отчет По Получателю
-        ///<summary>Список Отчет По Получателю</summary>
-        private IEnumerable<ResponseFileViewModel> _ResponseFiles;
+        #region ResponseFiles : IEnumerable<ResponseFileViewModel> - файлы xml
+        ///<summary>Выбранный файл xml</summary>
+        private IEnumerable<ResponseFileViewModel> _responseFiles;
 
-
-        ///<summary>Список Отчет По Получателю</summary>
+        ///<summary>Выбранный файл xml</summary>
         public IEnumerable<ResponseFileViewModel> ResponseFiles
         {
-            get => _ResponseFiles;
+            get => _responseFiles;
             set
             {
-                Set(ref _ResponseFiles, value);
+                if (!Set(ref _responseFiles, value)) return;
 
-                //_SelectedXmlAllFiles.Source = value;
-               // OnPropertyChanged(nameof(SelectedXmlAllFiles));
+                _fileXmlCollection.Source = value;
+                OnPropertyChanged(nameof(FileXmlCollection));
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Колекция для фильтрации
+        /// </summary>
+        private readonly CollectionViewSource _fileXmlCollection = new CollectionViewSource();
+        /// <summary>
+        /// Колекция для фильтрации
+        /// </summary>
+        public ICollectionView FileXmlCollection => _fileXmlCollection?.View;
 
-        #region FileFilterText : string - Текст фильтра получателей во всех файлах
+        #region FilesFilterText : string - Текст фильтра получателей
         ///<summary>Текст фильтра получателей</summary>
-        private string _fileFilterText;
+        private string _filesFilterText;
 
         ///<summary>Текст фильтра получателей</summary>
-        public string FileFilterText
+        public string FilesFilterText
         {
-            get => _fileFilterText;
+            get => _filesFilterText;
             set
             {
-                if (!Set(ref _fileFilterText, value)) return;
+                if (!Set(ref _filesFilterText, value)) return;
 
-                _selectedFileFilterText.Source = value;
-                OnPropertyChanged(nameof(SelectedFileFilterText));
+                _fileXmlCollection.View.Refresh();
             }
         }
 
@@ -58,8 +63,8 @@ namespace WpfParser.ViewModels
                 e.Accepted = false;
                 return;
             }
-            //ReportToRecipientViewModel
-            var filterText = _fileFilterText;
+
+            var filterText = _filesFilterText;
             if (string.IsNullOrEmpty(filterText)) return;
 
             var reports = response.ReportToRecipient;
@@ -75,11 +80,14 @@ namespace WpfParser.ViewModels
 
                 e.Accepted = false;
             }
+            
         }
-
-        private readonly CollectionViewSource _selectedFileFilterText = new CollectionViewSource();
-        public ICollectionView SelectedFileFilterText => _selectedFileFilterText?.View;
         #endregion
+
+
+        #endregion
+
+
 
         /// <summary>
         /// Список имен файлов
@@ -90,23 +98,23 @@ namespace WpfParser.ViewModels
 
         #region SelectedFile : ResponseFileViewModel - Выбранный файл xml
         ///<summary>Выбранный файл xml</summary>
-        private ResponseFileViewModel _SelectedFile;
+        private ResponseFileViewModel _selectedFile;
 
         ///<summary>Выбранный файл xml</summary>
         public ResponseFileViewModel SelectedFile
         {
-            get => _SelectedFile;
+            get => _selectedFile;
             set
             {
-                if (!Set(ref _SelectedFile, value)) return;
+                if (!Set(ref _selectedFile, value)) return;
 
-                _selectedXmlFile.Source = value?.ReportToRecipient;
-                OnPropertyChanged(nameof(SelectedXmlFile));
+                _selectedXmlFileCollection.Source = value?.ReportToRecipient;
+                OnPropertyChanged(nameof(SelectedXmlFileCollection));
             }
         }
 
-        private readonly CollectionViewSource _selectedXmlFile = new CollectionViewSource();
-        public ICollectionView SelectedXmlFile => _selectedXmlFile?.View;
+        private readonly CollectionViewSource _selectedXmlFileCollection = new CollectionViewSource();
+        public ICollectionView SelectedXmlFileCollection => _selectedXmlFileCollection?.View;
 
 
 
@@ -122,7 +130,7 @@ namespace WpfParser.ViewModels
             {
                 if (!Set(ref _personFilterText, value)) return;
 
-                _selectedXmlFile.View.Refresh();
+                _selectedXmlFileCollection.View.Refresh();
             }
         }
 
@@ -306,8 +314,8 @@ namespace WpfParser.ViewModels
             _FileNames = new Dictionary<int, string>();
             CheckVisibleFileName();
 
-            _selectedXmlFile.Filter += OnPersonFiltered;
-            //_SelectedXmlAllFiles.Filter += OnPersonFilterAllFiles;
+            _selectedXmlFileCollection.Filter += OnPersonFiltered;
+            _fileXmlCollection.Filter += OnPersonFilterAllFiles;
         }
 
 

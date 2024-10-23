@@ -13,37 +13,43 @@ namespace WpfParser.ViewModels
 {
     internal class FilesViewModel : ViewModel
     {
-        #region FilesXml : IEnumerable<ResponseFileViewModel> - файлы xml
+        #region ResponseFiles : IEnumerable<ResponseFileViewModel> - файлы xml
         ///<summary>Выбранный файл xml</summary>
-        private ObservableCollection<ResponseFileViewModel> _filesXml;
+        private ObservableCollection<ResponseFileViewModel> _responseFiles;
 
         ///<summary>Выбранный файл xml</summary>
-        public ObservableCollection<ResponseFileViewModel> FilesXml
+        public ObservableCollection<ResponseFileViewModel> ResponseFiles
         {
-            get => _filesXml;
+            get => _responseFiles;
             set
             {
-                if (!Set(ref _filesXml, value)) return;
+                if (!Set(ref _responseFiles, value)) return;
 
                 _fileXmlCollection.Source = value;
                 OnPropertyChanged(nameof(FileXmlCollection));
             }
         }
 
+        /// <summary>
+        /// Колекция для фильтрации
+        /// </summary>
         private readonly CollectionViewSource _fileXmlCollection = new CollectionViewSource();
+        /// <summary>
+        /// Колекция для фильтрации
+        /// </summary>
         public ICollectionView FileXmlCollection => _fileXmlCollection?.View;
         
-        #region PersonFilterText : string - Текст фильтра получателей
+        #region FilesFilterText : string - Текст фильтра получателей
         ///<summary>Текст фильтра получателей</summary>
-        private string _personFilterText;
+        private string _filesFilterText;
 
         ///<summary>Текст фильтра получателей</summary>
-        public string PersonFilterText
+        public string FilesFilterText
         {
-            get => _personFilterText;
+            get => _filesFilterText;
             set
             {
-                if (!Set(ref _personFilterText, value)) return;
+                if (!Set(ref _filesFilterText, value)) return;
 
                 _fileXmlCollection.View.Refresh();
             }
@@ -57,7 +63,7 @@ namespace WpfParser.ViewModels
                 return;
             }
             
-            var filterText = _personFilterText;
+            var filterText = _filesFilterText;
             if (string.IsNullOrEmpty(filterText)) return;
 
             var reports = response.ReportToRecipient;
@@ -83,7 +89,7 @@ namespace WpfParser.ViewModels
         public FilesViewModel()
         {
             var rf = DataService.ReadResponseFiles();
-            FilesXml = new ObservableCollection<ResponseFileViewModel>(rf);
+            ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
 
             _fileXmlCollection.Filter += OnPersonFilterAllFiles;
         }

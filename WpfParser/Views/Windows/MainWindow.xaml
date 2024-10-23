@@ -14,23 +14,18 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         FontSize="16"
         Title="MainWindow" Height="450" Width="1100">
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
+    
     <Window.Resources>
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="FontSize" Value="16"></Setter>
         </Style>
         <vm:FilesViewModel x:Key="xmlFiles" />
-        <vm:AllFilesViewModel x:Key="allXmlFiles" />
+        <vm:AllFilesViewModel x:Key="allXmlFiles"/>
     </Window.Resources>
-    <Grid>
+    <Grid DataContext="{StaticResource allXmlFiles }">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
-                <Menu.DataContext>
-                    <vm:AllFilesViewModel/>
-                </Menu.DataContext>
                 <MenuItem Header="Файл">
                     <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                 </MenuItem>
@@ -45,7 +40,7 @@
             </Menu>
             <StatusBar DockPanel.Dock="Bottom" Height="10">
                 <StatusBarItem >
-                    <TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>
+                    <!--<TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>-->
                 </StatusBarItem>
                 <StatusBarItem >
                     <ProgressBar Width="120" Height="14" Value="30"/>
@@ -53,9 +48,6 @@
             </StatusBar>
             <TabControl>
                 <TabItem Header="Файлы отзывов">
-                    <TabItem.DataContext>
-                        <vm:AllFilesViewModel/>
-                    </TabItem.DataContext>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200"/>
@@ -70,10 +62,7 @@
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <DockPanel DockPanel.Dock="Top" Margin="3,5">
-                                    <fa:IconBlock Icon="Search" Margin="0,0,5,0"  Foreground="Red"/>
-                                    <TextBox DataContext="{StaticResource xmlFiles}" 
-                                             Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}" 
-                                             Width="100"/>
+                                    
 
                                 </DockPanel>
                                 <StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal">
@@ -81,10 +70,10 @@
                                     <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="DCK код"  ></RadioButton>
                                     <RadioButton FontSize="12"  IsChecked="{Binding IsOnlyDis}" Command="{Binding OnlyDisCommand }" Content="Район"  ></RadioButton>
                                 </StackPanel>
-                                <ListBox Grid.Row="2" VerticalAlignment="Stretch" 
-                                         DataContext="{StaticResource xmlFiles}" 
+                                <ListBox Grid.Row="2" VerticalAlignment="Stretch"
+                                         IsSynchronizedWithCurrentItem="True"
                                          ItemsSource="{Binding FileXmlCollection, Mode=OneWay }"
-                                         SelectedItem=""
+                                         SelectedItem="{Binding SelectedFile}"
                                          SelectedIndex="0">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
@@ -105,11 +94,23 @@
                             <DockPanel>
                                 <DockPanel DockPanel.Dock="Top" Margin="3,5">
                                     <fa:IconBlock Icon="Search" Margin="0,0,5,0"  Foreground="Red"/>
-                                    <TextBox Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Margin="3,0" Text="по файлам"/>
+                                    <TextBox 
+                                        HorizontalAlignment="Left"
+                                        Text="{Binding FilesFilterText, UpdateSourceTrigger=PropertyChanged}" 
+                                        Width="100"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                        <fa:IconBlock Icon="Search" Margin="10,0,5,0"  Foreground="Red"/>
+                                        <TextBlock Margin="5,0" Text="по списку"  HorizontalAlignment="Left"/>
+                                        <TextBox 
+                                            Width="200"
+                                            Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
                                 </DockPanel>
-                                <DataGrid ItemsSource="{Binding SelectedXmlFile}" 
+                                <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 
                                           AutoGenerateColumns="False" 
                                           CanUserAddRows="False"
+                                          HorizontalScrollBarVisibility="Auto"
                                           GridLinesVisibility="Vertical"
                                           VerticalGridLinesBrush="DarkGray"
                                           AlternatingRowBackground="LightGray"
