@@ -77,7 +77,9 @@ namespace WpfParser.ViewModels
                     return;
                 }
 
-                if (report.Surname.ToLower().Contains(filterText.ToLower())) return;
+                var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
+                var expr2 = report.CodeNoReturn != null && report.CodeNoReturn.ToLower().Contains(filterText.ToLower());
+                if (expr1 || expr2) return;
             }
             e.Accepted = false;
         }
@@ -148,8 +150,10 @@ namespace WpfParser.ViewModels
                 e.Accepted = false;
                 return;
             }
-
-            if (report.Surname.ToLower().Contains(filterText.ToLower())) return;
+            
+            var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
+            var expr2 = report.CodeNoReturn != null && report.CodeNoReturn.ToLower().Contains(filterText.ToLower());
+            if (expr1 || expr2) return;
 
             e.Accepted = false;
         }
