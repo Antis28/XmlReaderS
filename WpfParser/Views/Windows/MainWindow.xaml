@@ -92,15 +92,15 @@
                                                             TargetNullValue='Группа не выбрана'}">
                             <DockPanel>
                                 <DockPanel DockPanel.Dock="Top" Margin="3,5">
-                                    <fa:IconBlock Icon="Search" Margin="0,0,5,0"  Foreground="Red"/>
-                                    <TextBlock Margin="3,0" Text="по файлам"/>
+                                    <!--<fa:IconBlock Icon="Search" Margin="0,0,5,0"  Foreground="Red"/>-->
+                                    <TextBlock Margin="3,0" Text="Поиск по файлам"/>
                                     <TextBox 
                                         HorizontalAlignment="Left"
                                         Text="{Binding FilesFilterText, UpdateSourceTrigger=PropertyChanged}" 
                                         Width="100" KeyUp="TextBox_KeyUp"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                        <fa:IconBlock Icon="Search" Margin="10,0,5,0"  Foreground="Red"/>
-                                        <TextBlock Margin="5,0" Text="по списку"  HorizontalAlignment="Left"/>
+                                        <!--<fa:IconBlock Icon="Search" Margin="10,0,5,0"  Foreground="Red"/>-->
+                                        <TextBlock Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
                                         <TextBox 
                                             Width="200"
                                             Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
