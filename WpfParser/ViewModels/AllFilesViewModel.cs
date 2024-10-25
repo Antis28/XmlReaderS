@@ -93,8 +93,8 @@ namespace WpfParser.ViewModels
         /// <summary>
         /// Список имен файлов
         /// </summary>
-        private IDictionary<int, string> _FileNames;
-        public IDictionary<int, string> FileNames { get => _FileNames; set => Set(ref _FileNames, value); }
+        private IDictionary<int, string> _fileNames;
+        public IDictionary<int, string> FileNames { get => _fileNames; set => Set(ref _fileNames, value); }
 
 
         #region SelectedFile : ResponseFileViewModel - Выбранный файл xml
@@ -314,7 +314,7 @@ namespace WpfParser.ViewModels
 
             var rf = DataService.ReadResponseFiles();
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
-            _FileNames = new Dictionary<int, string>();
+            _fileNames = new Dictionary<int, string>();
             CheckVisibleFileName();
 
             _selectedXmlFileCollection.Filter += OnPersonFiltered;
