@@ -35,17 +35,21 @@
                 </MenuItem>-->
                 <MenuItem  Header="Загрузить" Command="{Binding LoadBaseCommand  }" />
                 <MenuItem  Header="Очистить" Command="{Binding ClearBaseCommand  }" />
-                <MenuItem Header="Помощь">
-                    <MenuItem Header="О программе" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
-                    <MenuItem Header="Консоль" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
-                </MenuItem>
+                <MenuItem Header="Консоль" Command="{Binding CheckVisibleConsoleCommand}"></MenuItem>
+                
             </Menu>
             <StatusBar DockPanel.Dock="Bottom" Height="10">
                 <StatusBarItem >
                     <!--<TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>-->
                 </StatusBarItem>
                 <StatusBarItem >
-                    <ProgressBar Width="120" Height="14" Value="30"/>
+                    <ProgressBar
+                        Name="pb"
+                        Height="8"
+                        Width="190"
+                        Foreground="#47BDFF"
+                        Value="100"
+                    />
                 </StatusBarItem>
             </StatusBar>
             <TabControl>
@@ -110,7 +114,7 @@
                                             <PathGeometry Figures="m 0.97026 17.0297 v 6 H 22.9703 v -6 m -11 -15 V 19.0297 M 4.97026 9.02974 l 7 -7 l 7 7" FillRule="Nonzero"/>
                                         </Path.Data>
                                     </Path>
-                                    <TextBlock HorizontalAlignment="Center" Text="Drop files to upload" FontSize="12"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Center" Text="Для загрузки бросать сюда" FontSize="12"></TextBlock>
 
                                 </StackPanel>
                             </Grid>
@@ -190,7 +194,7 @@
                         </GroupBox>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Консоль">
+                <TabItem Header="Консоль" Visibility="{Binding IsVisibleConsole}">
                     <ListBox x:Name="consoleBox" 
                              ItemsSource="{Binding ConsoleBoxView}"
                              VerticalAlignment="Stretch">

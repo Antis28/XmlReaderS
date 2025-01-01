@@ -26,6 +26,41 @@ namespace WpfParser.ViewModels
         #endregion
 
 
+
+
+        #region IsVisibleConsole : bool - Видимость закладки консоль
+        ///<summary>Выбранный файл xml</summary>
+        private Visibility _IsVisibleConsole = Visibility.Collapsed;
+
+        ///<summary>Выбранный файл xml</summary>
+        public Visibility IsVisibleConsole
+        { get => _IsVisibleConsole; set => Set(ref _IsVisibleConsole, value); }
+
+        #endregion
+
+
+        #region CheckVisibleConsoleCommand - My notyfy
+
+        ///<summary>My notyfy</summary>
+        public ICommand CheckVisibleConsoleCommand { get; }
+
+        private bool CanCheckVisibleConsoleCommandExecute(object p) => true;
+
+        private void OnCheckVisibleConsoleCommandExecuted(object p)
+        {
+            IsVisibleConsole = IsVisibleConsole == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
+
         #region ResponseFiles : IEnumerable<ResponseFileViewModel> - файлы xml
         ///<summary>Выбранный файл xml</summary>
         private IEnumerable<ResponseFileViewModel> _responseFiles;
@@ -422,6 +457,9 @@ namespace WpfParser.ViewModels
 
             DragDropCommand =
                 new LambdaCommand(OnDragDropCommandExecuted, CanDragDropCommandExecute);
+
+            CheckVisibleConsoleCommand =
+                new LambdaCommand(OnCheckVisibleConsoleCommandExecuted, CanCheckVisibleConsoleCommandExecute);
             #endregion
 
 
