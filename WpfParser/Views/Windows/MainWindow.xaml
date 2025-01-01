@@ -14,7 +14,7 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:base="clr-namespace:WpfParser.Infrastructure.Commands.Base"
         FontSize="16"
-        Title="MainWindow" Height="450" Width="1100">
+        Title="Парсер файлов XML" Height="450" Width="1100">
 
     <Window.Resources>
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
@@ -26,12 +26,11 @@
     <Grid DataContext="{StaticResource AllXmlFiles }">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
-
                 <MenuItem Header="Файл">
                     <MenuItem Header="Открыть файл" Click="OpenFileItemOnClick"></MenuItem>
-                    <MenuItem  Header="Загрузить все файлы" Command="{Binding LoadBaseCommand  }" />
-                    <MenuItem  Header="Очистить список" Command="{Binding ClearBaseCommand  }" />
-                    <MenuItem  Header="Показать поиск по файлам" Command="{Binding CheckVisibleSearchInFilesCommand  }" />
+                    <MenuItem Header="Загрузить все файлы рядом" Command="{Binding LoadBaseCommand  }" />
+                    <MenuItem Header="Очистить список" Command="{Binding ClearBaseCommand  }" />
+                    <MenuItem Header="Показать поиск по файлам" Command="{Binding CheckVisibleSearchInFilesCommand  }" />
                     <!--<MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>-->
                 </MenuItem>
                 <!--<MenuItem Header="Редактировать">
