@@ -107,6 +107,7 @@ namespace WpfParser.Services
             var files = new List<ResponseFileViewModel>();
             foreach (var xmlFile in t)
             {
+
                 var file = ReadResponseFile(xmlFile);
                 files.Add(file);
             }

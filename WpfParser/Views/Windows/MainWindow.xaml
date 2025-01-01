@@ -12,9 +12,10 @@
         
         
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:base="clr-namespace:WpfParser.Infrastructure.Commands.Base"
         FontSize="16"
         Title="MainWindow" Height="450" Width="1100">
-    
+
     <Window.Resources>
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
         <Style TargetType="{x:Type MenuItem}">
@@ -25,16 +26,18 @@
     <Grid DataContext="{StaticResource AllXmlFiles }">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
+                
                 <MenuItem Header="Файл">
                     <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                 </MenuItem>
                 <!--<MenuItem Header="Редактировать">
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
                 </MenuItem>-->
-
+                <MenuItem Header="Загрузить" />
 
                 <MenuItem Header="Помощь">
                     <MenuItem Header="О программе" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
+                    <MenuItem Header="Консоль" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                 </MenuItem>
             </Menu>
             <StatusBar DockPanel.Dock="Bottom" Height="10">
@@ -61,7 +64,7 @@
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <DockPanel DockPanel.Dock="Top" Margin="3,5">
-                                    
+
 
                                 </DockPanel>
                                 <StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal">
@@ -103,7 +106,7 @@
                                         <TextBlock Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
                                         <TextBox 
                                             Width="200"
-                                            Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
+                                            Text="{Binding PersonFilterText,Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                                     </StackPanel>
                                 </DockPanel>
                                 <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 
@@ -123,7 +126,7 @@
                                         <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
 
-                                        
+
                                         <DataGridTemplateColumn Header="СНИЛС">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
@@ -160,7 +163,13 @@
                         </GroupBox>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Консоль">
+                    <ListBox x:Name="consoleBox" 
+                             ItemsSource="{Binding ConsoleBoxView}"
+                             VerticalAlignment="Stretch">
 
+                    </ListBox>
+                </TabItem>
             </TabControl>
         </DockPanel>
     </Grid>

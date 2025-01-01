@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,6 +15,20 @@ namespace WpfParser.ViewModels
 {
     internal class AllFilesViewModel : ViewModel
     {
+
+
+        #region ConsoleBoxView : string - My notyfy
+        ///<summary>My notyfy</summary>
+        private ObservableCollection<string> _ConsoleBoxView;
+        ///<summary>My notyfy</summary>
+        public ObservableCollection<string> ConsoleBoxView { get => _ConsoleBoxView; set => Set(ref _ConsoleBoxView, value); }
+        #endregion
+
+
+
+
+
+
         #region ResponseFiles : IEnumerable<ResponseFileViewModel> - файлы xml
         ///<summary>Выбранный файл xml</summary>
         private IEnumerable<ResponseFileViewModel> _responseFiles;
@@ -52,7 +67,7 @@ namespace WpfParser.ViewModels
             {
                 if (!Set(ref _filesFilterText, value)) return;
 
-                _fileXmlCollection.View.Refresh();
+                _fileXmlCollection?.View?.Refresh();
             }
         }
 
@@ -87,8 +102,7 @@ namespace WpfParser.ViewModels
 
 
         #endregion
-
-
+        
 
         /// <summary>
         /// Список имен файлов
@@ -131,7 +145,8 @@ namespace WpfParser.ViewModels
             {
                 if (!Set(ref _personFilterText, value)) return;
 
-                _selectedXmlFileCollection.View.Refresh();
+                _selectedXmlFileCollection?.View?.Refresh();
+                FilesFilterText = value;
             }
         }
 
@@ -239,7 +254,18 @@ namespace WpfParser.ViewModels
 
         private void CheckVisibleFileName()
         {
-            var rf = DataService.ReadResponseFiles();
+            IEnumerable<ResponseFileViewModel> rf = null;
+            try
+            {
+                rf = DataService.ReadResponseFiles();
+            } catch (Exception e)
+            {
+                ConsoleBoxView.Add(e.Message);
+                //Console.WriteLine(e);
+                return;
+            }
+            
+
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
 
             if (IsOnlyDis)
@@ -295,10 +321,30 @@ namespace WpfParser.ViewModels
             return tempName;
         }
 
+
+        #region LoadBaseCommand - LoadBase
+
+        ///<summary>LoadBase</summary>
+        public ICommand LoadBaseCommand { get; }
+
+        private bool CanLoadBaseCommandExecute(object p) => true;
+
+        private void OnLoadBaseCommandExecuted(object p)
+        {
+            var rf = DataService.ReadResponseFiles();
+            ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+        }
         #endregion
+
+
+        #endregion
+
+
 
         public AllFilesViewModel()
         {
+            ConsoleBoxView = new ObservableCollection<string>();
+
             #region Команды
 
             OnlyDckCommand =
@@ -310,15 +356,19 @@ namespace WpfParser.ViewModels
                 new LambdaCommand(OnOnlyDisCommandExecuted, CanOnlyDisCommandExecute);
             CheckVisibleFileNameCommand =
                 new LambdaCommand(OnCheckVisibleFileNameCommandExecuted, CanCheckVisibleFileNameCommandExecute);
+            
+            LoadBaseCommand=
+                new LambdaCommand(OnLoadBaseCommandExecuted, CanLoadBaseCommandExecute);
             #endregion
 
-            var rf = DataService.ReadResponseFiles();
-            ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+            
             _fileNames = new Dictionary<int, string>();
             CheckVisibleFileName();
 
             _selectedXmlFileCollection.Filter += OnPersonFiltered;
             _fileXmlCollection.Filter += OnPersonFilterAllFiles;
+
+            
         }
 
 
