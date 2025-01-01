@@ -61,6 +61,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="3*"></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <DockPanel DockPanel.Dock="Top" Margin="3,5">
@@ -85,7 +86,31 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
+                                <Rectangle  
+                                    Drop="Rectangle_Drop"
+                                    AllowDrop="True"
+                                    Grid.Row="3"
+                                    Fill="WhiteSmoke"
+                                    RadiusX="10"
+                                    RadiusY="10"
+                                    StrokeDashArray="6"
+                                    StrokeThickness="2"
+                                    StrokeDashCap="Round"
+                                    Stroke="Silver"
+                                    Margin="5,3,10,3"
+                                >
+                                </Rectangle>
+                                <StackPanel IsHitTestVisible="False" Grid.Row="3" HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                >
+                                    <Path HorizontalAlignment="Center" Margin="5" Stroke="#ff000000" StrokeThickness="2.0" StrokeDashCap="Flat" StrokeDashArray="">
+                                        <Path.Data>
+                                            <PathGeometry Figures="m 0.97026 17.0297 v 6 H 22.9703 v -6 m -11 -15 V 19.0297 M 4.97026 9.02974 l 7 -7 l 7 7" FillRule="Nonzero"/>
+                                        </Path.Data>
+                                    </Path>
+                                    <TextBlock HorizontalAlignment="Center" Text="Drop files to upload" FontSize="12"></TextBlock>
 
+                                </StackPanel>
                             </Grid>
                         </GroupBox>
                         <GridSplitter Grid.Column="1" ResizeDirection="Columns" ShowsPreview="False" Width="3" 
