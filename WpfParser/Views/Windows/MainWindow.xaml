@@ -37,9 +37,9 @@
                 <!--<MenuItem Header="Редактировать">
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
                 </MenuItem>-->
-                
+
                 <MenuItem Header="Консоль" Command="{Binding CheckVisibleConsoleCommand}"></MenuItem>
-                
+
             </Menu>
             <StatusBar DockPanel.Dock="Bottom" Height="10">
                 <StatusBarItem >
@@ -141,7 +141,23 @@
                                         Width="100" KeyUp="TextBox_KeyUp"/>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                         <!--<fa:IconBlock Icon="Search" Margin="10,0,5,0"  Foreground="Red"/>-->
-                                        <TextBlock Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
+                                        <Path HorizontalAlignment="Center" 
+                                              Stretch="Fill" 
+                                              Height="20" 
+                                              Width="20" 
+                                              Margin="2"
+                                              Stroke="#ff000000"
+                                              StrokeThickness="2.0"
+                                              StrokeDashCap="Flat"
+                                              StrokeDashArray=""
+                                              
+                                              >
+                                            <Path.Data>
+                                                <PathGeometry Figures="M 909.6 854.5 L 649.9 594.8 C 690.2 542.7 712 479 712 412 c 0 -80.2 -31.3 -155.4 -87.9 -212.1 c -56.6 -56.7 -132 -87.9 -212.1 -87.9 s -155.5 31.3 -212.1 87.9 C 143.2 256.5 112 331.8 112 412 c 0 80.1 31.3 155.5 87.9 212.1 C 256.5 680.8 331.8 712 412 712 c 67 0 130.6 -21.8 182.7 -62 l 259.7 259.6 a 8.2 8.2 0 0 0 11.6 0 l 43.6 -43.5 a 8.2 8.2 0 0 0 0 -11.6 M 570.4 570.4 C 528 612.7 471.8 636 412 636 s -116 -23.3 -158.4 -65.6 C 211.3 528 188 471.8 188 412 s 23.3 -116.1 65.6 -158.4 C 296 211.3 352.2 188 412 188 s 116.1 23.2 158.4 65.6 S 636 352.2 636 412 s -23.3 116.1 -65.6 158.4" FillRule="Nonzero"/>
+                                            </Path.Data>
+                                        </Path>
+
+                                        <TextBlock Visibility="Collapsed" Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
                                         <TextBox 
 
                                             Width="200"
