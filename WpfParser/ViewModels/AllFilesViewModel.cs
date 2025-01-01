@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using WpfParser.Infrastructure.Commands;
+using WpfParser.Models;
 using WpfParser.Services;
 using WpfParser.ViewModels.Base;
 
@@ -19,14 +20,10 @@ namespace WpfParser.ViewModels
 
         #region ConsoleBoxView : string - My notyfy
         ///<summary>My notyfy</summary>
-        private ObservableCollection<string> _ConsoleBoxView;
+        private ObservableCollection<ConsoleMessage> _ConsoleBoxView;
         ///<summary>My notyfy</summary>
-        public ObservableCollection<string> ConsoleBoxView { get => _ConsoleBoxView; set => Set(ref _ConsoleBoxView, value); }
+        public ObservableCollection<ConsoleMessage> ConsoleBoxView { get => _ConsoleBoxView; set => Set(ref _ConsoleBoxView, value); }
         #endregion
-
-
-
-
 
 
         #region ResponseFiles : IEnumerable<ResponseFileViewModel> - файлы xml
@@ -260,8 +257,7 @@ namespace WpfParser.ViewModels
                 rf = DataService.ReadResponseFiles();
             } catch (Exception e)
             {
-                ConsoleBoxView.Add(e.Message);
-                //Console.WriteLine(e);
+                ConsoleService.GetInstance().ShowMessage("Произошла ошибка!",e.Message);
                 return;
             }
             
@@ -339,11 +335,27 @@ namespace WpfParser.ViewModels
 
         #endregion
 
+        #region MyCommand - My notyfy
+
+        ///<summary>My notyfy</summary>
+        public ICommand MyCommand { get; }
+
+        private bool CanMyCommandExecute(object p) => true;
+
+        private void OnMyCommandExecuted(object p)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+
 
 
         public AllFilesViewModel()
         {
-            ConsoleBoxView = new ObservableCollection<string>();
+            ConsoleBoxView = new ObservableCollection<ConsoleMessage>();
+            ConsoleService.SetObservableCollection(ConsoleBoxView);
+            
 
             #region Команды
 

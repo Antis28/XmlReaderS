@@ -12,6 +12,11 @@ namespace WpfParser.Services
 {
     internal class DataService
     {
+        /// <summary>
+        /// Читает 1 xml файл
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static ResponseFileViewModel ReadResponseFile(string path)
         {
             var file = new ResponseFileViewModel
@@ -107,9 +112,15 @@ namespace WpfParser.Services
             var files = new List<ResponseFileViewModel>();
             foreach (var xmlFile in t)
             {
-
-                var file = ReadResponseFile(xmlFile);
-                files.Add(file);
+                try
+                {
+                    var file = ReadResponseFile(xmlFile);
+                    files.Add(file);
+                } catch (Exception ex)
+                {
+                    ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла {xmlFile}", ex.Message);
+                }
+               
             }
 
             return files;

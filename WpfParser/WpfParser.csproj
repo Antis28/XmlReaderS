@@ -62,6 +62,8 @@
     <Compile Include="Infrastructure\Commands\Base\Command.cs" />
     <Compile Include="Infrastructure\Commands\CloseApplicationCommand.cs" />
     <Compile Include="Infrastructure\Commands\LambdaCommand.cs" />
+    <Compile Include="Models\ConsoleMessage.cs" />
+    <Compile Include="Services\ConsoleService.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="ViewModels\AllFilesViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />

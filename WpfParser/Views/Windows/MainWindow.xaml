@@ -26,14 +26,14 @@
     <Grid DataContext="{StaticResource AllXmlFiles }">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
-                
+
                 <MenuItem Header="Файл">
                     <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                 </MenuItem>
                 <!--<MenuItem Header="Редактировать">
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
                 </MenuItem>-->
-                <MenuItem Header="Загрузить" />
+                <MenuItem  Header="Загрузить" Command="{Binding LoadBaseCommand  }" />
 
                 <MenuItem Header="Помощь">
                     <MenuItem Header="О программе" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
@@ -167,6 +167,14 @@
                     <ListBox x:Name="consoleBox" 
                              ItemsSource="{Binding ConsoleBoxView}"
                              VerticalAlignment="Stretch">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:ConsoleMessage}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" Foreground="Red"/>
+                                    <TextBlock Text="{Binding Description}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
 
                     </ListBox>
                 </TabItem>
