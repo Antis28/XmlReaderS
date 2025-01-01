@@ -490,7 +490,9 @@ namespace WpfParser.ViewModels
 
 
             _fileNames = new Dictionary<int, string>();
-            CheckVisibleFileName();
+
+            ResponseFiles = new ObservableCollection<ResponseFileViewModel>();
+            //CheckVisibleFileName();
 
             _selectedXmlFileCollection.Filter += OnPersonFiltered;
             _fileXmlCollection.Filter += OnPersonFilterAllFiles;

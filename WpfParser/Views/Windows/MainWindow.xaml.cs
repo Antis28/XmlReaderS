@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using WpfParser.Services;
 using WpfParser.ViewModels;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Path = System.IO.Path;
 
 namespace WpfParser
@@ -55,13 +56,25 @@ namespace WpfParser
             base.OnDrop(e);
         }
 
-       
+
 
         private void OpenFileItemOnClick(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog() { Multiselect = true };
-            bool? responce = openFileDialog.ShowDialog();
-            if (responce == false) return;
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Multiselect = true ,
+                FileName = "Document.XML", // Default file name
+                InitialDirectory = Environment.CurrentDirectory,
+                DefaultExt = ".xml",
+                Filter = "xml Files (*.xml)|*.XML",
+                CheckFileExists = true,
+                CheckPathExists = true,
+                ValidateNames = true,
+
+            };
+
+            bool? response = openFileDialog.ShowDialog();
+            if (response == false) return;
 
             //Get selected files
             string[] files = openFileDialog.FileNames;
@@ -86,7 +99,10 @@ namespace WpfParser
 
 
                 var rf = DataService.ReadResponseFiles(fileNames);
+                if (allFilesViewModel == null) return false;
+
                 var t = allFilesViewModel.ResponseFiles;
+
 
                 var coll = new ObservableCollection<ResponseFileViewModel>();
 
@@ -107,10 +123,10 @@ namespace WpfParser
             catch (Exception ex)
             {
                 ConsoleService.GetInstance().ShowMessage("Произошла ошибка!", ex.Message);
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
     }
 }
