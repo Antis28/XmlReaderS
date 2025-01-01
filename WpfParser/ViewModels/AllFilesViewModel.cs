@@ -18,7 +18,7 @@ namespace WpfParser.ViewModels
     {
 
 
-        #region ConsoleBoxView : string - My notyfy
+        #region ConsoleBoxView : string - ConsoleBox
         ///<summary>My notyfy</summary>
         private ObservableCollection<ConsoleMessage> _ConsoleBoxView;
         ///<summary>My notyfy</summary>
@@ -79,7 +79,7 @@ namespace WpfParser.ViewModels
             var filterText = _filesFilterText;
             if (string.IsNullOrEmpty(filterText)) return;
 
-            
+
             var reports = response.ReportToRecipient;
             foreach (var report in reports)
             {
@@ -99,7 +99,7 @@ namespace WpfParser.ViewModels
 
 
         #endregion
-        
+
 
         /// <summary>
         /// Список имен файлов
@@ -162,7 +162,7 @@ namespace WpfParser.ViewModels
                 e.Accepted = false;
                 return;
             }
-            
+
             var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
             var expr2 = report.CodeNoReturn != null && report.CodeNoReturn.ToLower().Contains(filterText.ToLower());
             if (expr1 || expr2) return;
@@ -252,17 +252,29 @@ namespace WpfParser.ViewModels
         private void CheckVisibleFileName()
         {
             IEnumerable<ResponseFileViewModel> rf = null;
-            try
+            if (ResponseFiles == null)
             {
-                rf = DataService.ReadResponseFiles();
-            } catch (Exception e)
+                try
+                {
+                    rf = DataService.ReadResponseFiles();
+                }
+                catch (Exception e)
+                {
+                    ConsoleService.GetInstance().ShowMessage("Произошла ошибка!", e.Message);
+                    return;
+                }
+                if (rf == null) { return; }
+                ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+            }
+            UpdateShowingNames();
+        }
+
+        public void UpdateShowingNames()
+        {
+            if (ResponseFiles == null)
             {
-                ConsoleService.GetInstance().ShowMessage("Произошла ошибка!",e.Message);
                 return;
             }
-            
-
-            ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
 
             if (IsOnlyDis)
             {
@@ -274,7 +286,7 @@ namespace WpfParser.ViewModels
 
                     var tempName = ExtractDckFromName(file);
                     var tempName2 = ExtractDisFromName(file);
-                    file.FileName = $"{tempName2} - {tempName}";
+                    file.VisibleName = $"{tempName2} - {tempName}";
 
                     FileNames.Add(index, tempName);
                 }
@@ -288,12 +300,25 @@ namespace WpfParser.ViewModels
                     index++;
                     var tempName = ExtractDckFromName(file);
                     var tempName2 = ExtractDisFromName(file);
-                    file.FileName = $"{tempName} - Район: {tempName2}";
+                    file.VisibleName = $"{tempName} - Район: {tempName2}";
+                    FileNames.Add(index, tempName);
+                }
+            }
+            if (IsAllVisible)
+            {
+                FileNames.Clear();
+                var index = 0;
+                foreach (var file in ResponseFiles)
+                {
+                    index++;
+                    var tempName = ExtractDckFromName(file);
+                    var tempName2 = ExtractDisFromName(file);
+                    file.VisibleName = file.FileName;
                     FileNames.Add(index, tempName);
                 }
             }
             ResponseFiles = from item in ResponseFiles
-                            orderby item.FileName
+                            orderby item.VisibleName
                             select item;
         }
 
@@ -329,24 +354,30 @@ namespace WpfParser.ViewModels
         {
             var rf = DataService.ReadResponseFiles();
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+            CheckVisibleFileName();
         }
         #endregion
 
 
         #endregion
 
-        #region MyCommand - My notyfy
 
-        ///<summary>My notyfy</summary>
-        public ICommand MyCommand { get; }
+        #region DragDropCommand - Gets and Sets the ICommand that manages dragging and dropping.
 
-        private bool CanMyCommandExecute(object p) => true;
+        ///<summary>For drag and drop</summary>
+        public ICommand DragDropCommand { get; }
 
-        private void OnMyCommandExecuted(object p)
+        private bool CanDragDropCommandExecute(object p) => true;
+
+        private void OnDragDropCommandExecuted(object p)
         {
             throw new NotImplementedException();
         }
+
+
         #endregion
+
+
 
 
 
@@ -355,7 +386,7 @@ namespace WpfParser.ViewModels
         {
             ConsoleBoxView = new ObservableCollection<ConsoleMessage>();
             ConsoleService.SetObservableCollection(ConsoleBoxView);
-            
+
 
             #region Команды
 
@@ -368,19 +399,22 @@ namespace WpfParser.ViewModels
                 new LambdaCommand(OnOnlyDisCommandExecuted, CanOnlyDisCommandExecute);
             CheckVisibleFileNameCommand =
                 new LambdaCommand(OnCheckVisibleFileNameCommandExecuted, CanCheckVisibleFileNameCommandExecute);
-            
-            LoadBaseCommand=
+
+            LoadBaseCommand =
                 new LambdaCommand(OnLoadBaseCommandExecuted, CanLoadBaseCommandExecute);
+
+            DragDropCommand =
+                new LambdaCommand(OnDragDropCommandExecuted, CanDragDropCommandExecute);
             #endregion
 
-            
+
             _fileNames = new Dictionary<int, string>();
             CheckVisibleFileName();
 
             _selectedXmlFileCollection.Filter += OnPersonFiltered;
             _fileXmlCollection.Filter += OnPersonFilterAllFiles;
 
-            
+
         }
 
 

@@ -108,19 +108,25 @@ namespace WpfParser.Services
 
         public static IEnumerable<ResponseFileViewModel> ReadResponseFiles()
         {
-            var t = Directory.GetFiles(Environment.CurrentDirectory, "*.xml", SearchOption.AllDirectories);
+            var fileNames = Directory.GetFiles(Environment.CurrentDirectory, "*.xml", SearchOption.AllDirectories);
+            return ReadResponseFiles(fileNames);
+        }
+
+        public static IEnumerable<ResponseFileViewModel> ReadResponseFiles(string[] fileNames)
+        {
             var files = new List<ResponseFileViewModel>();
-            foreach (var xmlFile in t)
+            foreach (var xmlFile in fileNames)
             {
                 try
                 {
                     var file = ReadResponseFile(xmlFile);
                     files.Add(file);
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла {xmlFile}", ex.Message);
                 }
-               
+
             }
 
             return files;

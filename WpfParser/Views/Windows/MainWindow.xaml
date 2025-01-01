@@ -81,13 +81,15 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type vm:ResponseFileViewModel}">
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding FileName, Mode=TwoWay}" />
+                                                <TextBlock Text="{Binding VisibleName, Mode=TwoWay}" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-                                <Rectangle  
-                                    Drop="Rectangle_Drop"
+                                <Rectangle 
+                                    x:Name="RectangleDrop"
+                                    Drop="SetDropCommand"
+                                    
                                     AllowDrop="True"
                                     Grid.Row="3"
                                     Fill="WhiteSmoke"

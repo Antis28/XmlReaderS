@@ -19,6 +19,16 @@ namespace WpfParser.ViewModels
             set => Set(ref _FileName, value);
         }
         #endregion
+
+        #region File name visible
+        private string _VisibleName;
+        /// <summary>Отображаемое имя Xml файла</summary>
+        public string VisibleName
+        {
+            get => _VisibleName;
+            set => Set(ref _VisibleName, value);
+        }
+        #endregion
         public IList<ReportToRecipientViewModel> ReportToRecipient { get; set; }
         
     }

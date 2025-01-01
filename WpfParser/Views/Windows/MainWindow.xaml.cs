@@ -1,6 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using WpfParser.Services;
+using WpfParser.ViewModels;
 
 namespace WpfParser
 {
@@ -18,7 +29,7 @@ namespace WpfParser
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             //var b = ShowDialog();
-           // MessageBox.Show(e.ToString(), "Ошибка!");
+            // MessageBox.Show(e.ToString(), "Ошибка!");
         }
 
         private void TextBox_KeyUp(object sender, KeyEventArgs e)
@@ -27,7 +38,49 @@ namespace WpfParser
             {
                 fileListBox.SelectedIndex = 0;
             }
-           
+
+        }
+
+        private void SetDropCommand(object sender, DragEventArgs e)
+        {
+
+            //frameworkElement.DataContext
+            var r = fileListBox.DataContext as AllFilesViewModel;
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                try
+                {
+                    var rf = DataService.ReadResponseFiles(files);
+                    var t = r.ResponseFiles;
+
+                    var coll = new ObservableCollection<ResponseFileViewModel>();
+
+                    foreach (var item in t)
+                    {
+                        coll.Add(item);
+                    }
+
+                    foreach (var item in rf)
+                    {
+                        coll.Add(item);
+                    }
+
+                    r.ResponseFiles = coll;
+                    r.UpdateShowingNames();
+
+                }
+                catch (Exception ex)
+                {
+                    ConsoleService.GetInstance().ShowMessage("Произошла ошибка!", ex.Message);
+                    return;
+                }
+
+
+            }
+            base.OnDrop(e);
         }
     }
 }
