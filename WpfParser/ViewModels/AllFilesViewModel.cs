@@ -27,8 +27,8 @@ namespace WpfParser.ViewModels
 
 
 
-
-        #region IsVisibleConsole : bool - Видимость закладки консоль
+        #region Видимость закладки консоль
+            #region IsVisibleConsole : bool - Видимость закладки консоль
         ///<summary>Выбранный файл xml</summary>
         private Visibility _IsVisibleConsole = Visibility.Collapsed;
 
@@ -36,12 +36,12 @@ namespace WpfParser.ViewModels
         public Visibility IsVisibleConsole
         { get => _IsVisibleConsole; set => Set(ref _IsVisibleConsole, value); }
 
-        #endregion
+            #endregion
 
 
-        #region CheckVisibleConsoleCommand - My notyfy
+            #region CheckVisibleConsoleCommand - Переключить видимость закладки консоль
 
-        ///<summary>My notyfy</summary>
+        ///<summary>Переключить видимость закладки консоль</summary>
         public ICommand CheckVisibleConsoleCommand { get; }
 
         private bool CanCheckVisibleConsoleCommandExecute(object p) => true;
@@ -51,13 +51,35 @@ namespace WpfParser.ViewModels
             IsVisibleConsole = IsVisibleConsole == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
         #endregion
+        #endregion
 
 
 
+        #region Видимость поля поиска по файлам
+        #region IsVisibleConsole : bool - Видимость поля поиска по файлам
+        ///<summary>Выбранный файл xml</summary>
+        private Visibility _IsVisibleSerchInFiles = Visibility.Collapsed;
+
+        ///<summary>Выбранный файл xml</summary>
+        public Visibility IsVisibleSearchInFiles
+        { get => _IsVisibleSerchInFiles; set => Set(ref _IsVisibleSerchInFiles, value); }
+
+        #endregion
 
 
+        #region CheckVisibleSearchInFilesCommand - Переключить видимость закладки консоль
 
+        ///<summary>Переключить видимость закладки консоль</summary>
+        public ICommand CheckVisibleSearchInFilesCommand { get; }
 
+        private bool CanCheckVisibleSearchInFilesCommandExecute(object p) => true;
+
+        private void OnCheckVisibleSearchInFilesCommandExecuted(object p)
+        {
+            IsVisibleSearchInFiles = IsVisibleSearchInFiles == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+        #endregion
+        #endregion
 
 
 
@@ -176,9 +198,10 @@ namespace WpfParser.ViewModels
             set
             {
                 if (!Set(ref _personFilterText, value)) return;
-
+                
                 _selectedXmlFileCollection?.View?.Refresh();
                 FilesFilterText = value;
+
             }
         }
 
@@ -460,6 +483,9 @@ namespace WpfParser.ViewModels
 
             CheckVisibleConsoleCommand =
                 new LambdaCommand(OnCheckVisibleConsoleCommandExecuted, CanCheckVisibleConsoleCommandExecute);
+
+            CheckVisibleSearchInFilesCommand =
+                new LambdaCommand(OnCheckVisibleSearchInFilesCommandExecuted, CanCheckVisibleSearchInFilesCommandExecute);
             #endregion
 
 

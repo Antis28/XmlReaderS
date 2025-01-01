@@ -28,13 +28,16 @@
             <Menu DockPanel.Dock="Top">
 
                 <MenuItem Header="Файл">
-                    <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
+                    <MenuItem Header="Открыть файл" Click="OpenFileItemOnClick"></MenuItem>
+                    <MenuItem  Header="Загрузить все файлы" Command="{Binding LoadBaseCommand  }" />
+                    <MenuItem  Header="Очистить список" Command="{Binding ClearBaseCommand  }" />
+                    <MenuItem  Header="Показать поиск по файлам" Command="{Binding CheckVisibleSearchInFilesCommand  }" />
+                    <!--<MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>-->
                 </MenuItem>
                 <!--<MenuItem Header="Редактировать">
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
                 </MenuItem>-->
-                <MenuItem  Header="Загрузить" Command="{Binding LoadBaseCommand  }" />
-                <MenuItem  Header="Очистить" Command="{Binding ClearBaseCommand  }" />
+                
                 <MenuItem Header="Консоль" Command="{Binding CheckVisibleConsoleCommand}"></MenuItem>
                 
             </Menu>
@@ -121,14 +124,18 @@
                         </GroupBox>
                         <GridSplitter Grid.Column="1" ResizeDirection="Columns" ShowsPreview="False" Width="3" 
                                       HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-                        <GroupBox Grid.Column="2" Header="{Binding SelectedFile.FileName, 
+                        <GroupBox Grid.Column="2" Header="{Binding SelectedFile.VisibleName, 
                                                             FallbackValue='Содержимое xml', 
                                                             TargetNullValue='Группа не выбрана'}">
                             <DockPanel>
                                 <DockPanel DockPanel.Dock="Top" Margin="3,5">
                                     <!--<fa:IconBlock Icon="Search" Margin="0,0,5,0"  Foreground="Red"/>-->
-                                    <TextBlock Margin="3,0" Text="Поиск по файлам"/>
+                                    <TextBlock
+                                        Visibility="{Binding IsVisibleSearchInFiles}"
+                                        Margin="3,0" 
+                                        Text="Поиск по файлам"/>
                                     <TextBox 
+                                        Visibility="{Binding IsVisibleSearchInFiles}"
                                         HorizontalAlignment="Left"
                                         Text="{Binding FilesFilterText, UpdateSourceTrigger=PropertyChanged}" 
                                         Width="100" KeyUp="TextBox_KeyUp"/>
@@ -136,8 +143,10 @@
                                         <!--<fa:IconBlock Icon="Search" Margin="10,0,5,0"  Foreground="Red"/>-->
                                         <TextBlock Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
                                         <TextBox 
+
                                             Width="200"
-                                            Text="{Binding PersonFilterText,Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                                            Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"
+                                            KeyUp="TextBox_KeyUp"/>
                                     </StackPanel>
                                 </DockPanel>
                                 <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 

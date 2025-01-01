@@ -10,8 +10,10 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using WpfParser.Services;
 using WpfParser.ViewModels;
+using Path = System.IO.Path;
 
 namespace WpfParser
 {
@@ -43,44 +45,72 @@ namespace WpfParser
 
         private void SetDropCommand(object sender, DragEventArgs e)
         {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop)) { return; }
 
-            //frameworkElement.DataContext
-            var r = fileListBox.DataContext as AllFilesViewModel;
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (LoadNewFilesInBase(files)) return;
+
+
+            base.OnDrop(e);
+        }
+
+       
+
+        private void OpenFileItemOnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog() { Multiselect = true };
+            bool? responce = openFileDialog.ShowDialog();
+            if (responce == false) return;
+
+            //Get selected files
+            string[] files = openFileDialog.FileNames;
+
+            LoadNewFilesInBase(files);
+        }
+
+        private bool LoadNewFilesInBase(string[] files)
+        {
+            var allFilesViewModel = fileListBox.DataContext as AllFilesViewModel;
+            string[] fileNames = null;
+            try
             {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                try
+                if (Path.HasExtension(files[0]))
                 {
-                    var rf = DataService.ReadResponseFiles(files);
-                    var t = r.ResponseFiles;
-
-                    var coll = new ObservableCollection<ResponseFileViewModel>();
-
-                    foreach (var item in t)
-                    {
-                        coll.Add(item);
-                    }
-
-                    foreach (var item in rf)
-                    {
-                        coll.Add(item);
-                    }
-
-                    r.ResponseFiles = coll;
-                    r.UpdateShowingNames();
-
+                    fileNames = files;
                 }
-                catch (Exception ex)
+                else
                 {
-                    ConsoleService.GetInstance().ShowMessage("Произошла ошибка!", ex.Message);
-                    return;
+                    fileNames = Directory.GetFiles(Environment.CurrentDirectory, "*.xml", SearchOption.AllDirectories);
                 }
 
+
+                var rf = DataService.ReadResponseFiles(fileNames);
+                var t = allFilesViewModel.ResponseFiles;
+
+                var coll = new ObservableCollection<ResponseFileViewModel>();
+
+                foreach (var item in t)
+                {
+                    coll.Add(item);
+                }
+
+                foreach (var item in rf)
+                {
+                    coll.Add(item);
+                }
+
+                allFilesViewModel.ResponseFiles = coll;
+                allFilesViewModel.UpdateShowingNames();
 
             }
-            base.OnDrop(e);
+            catch (Exception ex)
+            {
+                ConsoleService.GetInstance().ShowMessage("Произошла ошибка!", ex.Message);
+                return true;
+            }
+
+            return false;
         }
     }
 }
