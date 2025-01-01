@@ -358,6 +358,20 @@ namespace WpfParser.ViewModels
         }
         #endregion
 
+        #region ClearBaseCommand - LoadBase
+
+        ///<summary>LoadBase</summary>
+        public ICommand ClearBaseCommand { get; }
+
+        private bool CanClearBaseCommandExecute(object p) => true;
+
+        private void OnClearBaseCommandExecuted(object p)
+        {
+            ResponseFiles = new ObservableCollection<ResponseFileViewModel>();
+            CheckVisibleFileName();
+        }
+        #endregion
+
 
         #endregion
 
@@ -402,6 +416,9 @@ namespace WpfParser.ViewModels
 
             LoadBaseCommand =
                 new LambdaCommand(OnLoadBaseCommandExecuted, CanLoadBaseCommandExecute);
+
+            ClearBaseCommand =
+                new LambdaCommand(OnClearBaseCommandExecuted, CanClearBaseCommandExecute);
 
             DragDropCommand =
                 new LambdaCommand(OnDragDropCommandExecuted, CanDragDropCommandExecute);

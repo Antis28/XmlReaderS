@@ -34,7 +34,7 @@
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
                 </MenuItem>-->
                 <MenuItem  Header="Загрузить" Command="{Binding LoadBaseCommand  }" />
-
+                <MenuItem  Header="Очистить" Command="{Binding ClearBaseCommand  }" />
                 <MenuItem Header="Помощь">
                     <MenuItem Header="О программе" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                     <MenuItem Header="Консоль" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
