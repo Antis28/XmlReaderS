@@ -253,10 +253,26 @@ namespace WpfParser.ViewModels
         private bool _IsAllVisible = false;
         ///<summary>Отображать только все</summary>
         public bool IsAllVisible { get => _IsAllVisible; set => Set(ref _IsAllVisible, value); }
-        #endregion 
+        #endregion
         #endregion
 
         #region Commands
+
+
+        #region ClearPersonFieldCommand - 
+
+        ///<summary>My notyfy</summary>
+        public ICommand ClearPersonFieldCommand { get; }
+
+        private bool CanClearPersonFieldCommandExecute(object p) => true;
+
+        private void OnClearPersonFieldCommandExecuted(object p)
+        {
+            PersonFilterText = string.Empty;
+        }
+        #endregion
+
+
 
         #region OnlyDckCommand
 
@@ -486,6 +502,9 @@ namespace WpfParser.ViewModels
 
             CheckVisibleSearchInFilesCommand =
                 new LambdaCommand(OnCheckVisibleSearchInFilesCommandExecuted, CanCheckVisibleSearchInFilesCommandExecute);
+
+            ClearPersonFieldCommand =
+                new LambdaCommand(OnClearPersonFieldCommandExecuted, CanClearPersonFieldCommandExecute);
             #endregion
 
 

@@ -158,11 +158,71 @@
                                         </Path>
 
                                         <TextBlock Visibility="Collapsed" Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
-                                        <TextBox 
-
+                                        <TextBox
+                                            x:Name="personField"
+                                            FontSize="18"
                                             Width="200"
                                             Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"
                                             KeyUp="TextBox_KeyUp"/>
+                                        <Button Command="{Binding ClearPersonFieldCommand}" Click="Button_Click">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border CornerRadius="7"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Height="{TemplateBinding Height}"
+                                                            Width="{TemplateBinding Width}">
+
+                                                        <Border.Background>
+                                                            <SolidColorBrush x:Name="BorderColor" Color="WhiteSmoke" />
+                                                        </Border.Background>
+                                                        <ContentControl Margin="{TemplateBinding Padding}"
+                                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                        Content="{TemplateBinding Content}" />
+
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup Name="CommonStates">
+                                                                <VisualState Name="Pressed">
+                                                                    <Storyboard>
+                                                                        <ColorAnimation Storyboard.TargetName="BorderColor"
+                                                                            Storyboard.TargetProperty="Color" To="Red" />
+                                                                    </Storyboard>
+                                                                </VisualState>
+                                                                <VisualState Name="MouseOver">
+                                                                    <Storyboard>
+                                                                        <ColorAnimation Storyboard.TargetName="BorderColor"
+                                                                            Storyboard.TargetProperty="Color" To="LightBlue" />
+                                                                    </Storyboard>
+                                                                </VisualState>
+                                                                <VisualState Name="Normal">
+                                                                    <Storyboard>
+                                                                        <ColorAnimation Storyboard.TargetName="BorderColor"
+                                                                            Storyboard.TargetProperty="Color" To="WhiteSmoke" />
+                                                                    </Storyboard>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <Path  x:Name="Xicon"
+                                                   HorizontalAlignment="Center" 
+                                                   Stretch="Fill" 
+                                                   Height="20" 
+                                                   Width="20" 
+                                                   Margin="0"
+                                                   Stroke="#ff000000"
+                                                   StrokeThickness="2.0"
+                                                   StrokeDashCap="Flat"
+                                                   StrokeDashArray=""
+                                                    
+                                            >
+                                                <Path.Data>
+                                                    <PathGeometry Figures="M 17.414 16 L 26 7.414 L 24.586 6 L 16 14.586 L 7.414 6 L 6 7.414 L 14.586 16 L 6 24.586 L 7.414 26 L 16 17.414 L 24.586 26 L 26 24.586 z" FillRule="Nonzero"/>
+                                                </Path.Data>
+                                            </Path>
+                                        </Button>
                                     </StackPanel>
                                 </DockPanel>
                                 <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 

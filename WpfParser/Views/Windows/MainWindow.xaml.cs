@@ -128,5 +128,10 @@ namespace WpfParser
 
             return true;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            personField.Focus();
+        }
     }
 }
