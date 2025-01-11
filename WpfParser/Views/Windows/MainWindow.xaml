@@ -56,13 +56,7 @@
 
             </Menu>
             <StatusBar DockPanel.Dock="Bottom" MinHeight="20">
-                <StatusBarItem >
-                    <TextBlock d:DataContext="{StaticResource StatusViewModel}" 
-                               DataContext="{StaticResource StatusViewModel}"  
-                               Text="{Binding FileCounts}" 
-                               MinWidth="150" MaxWidth="350"
-                               Margin="2"/>
-                </StatusBarItem>
+                
                 <StatusBarItem >
                     <ProgressBar
                         Name="pb"
@@ -72,6 +66,13 @@
                         Value="{Binding UploadProgress}"
                     />
 
+                </StatusBarItem>
+                <StatusBarItem >
+                    <TextBlock d:DataContext="{StaticResource StatusViewModel}" 
+                               DataContext="{StaticResource StatusViewModel}"  
+                               Text="{Binding FileCounts}" 
+                               MinWidth="150" MaxWidth="350"
+                               Margin="2"/>
                 </StatusBarItem>
             </StatusBar>
             <TabControl>
@@ -179,11 +180,21 @@
                                         <TextBlock Visibility="Collapsed" Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
                                         <TextBox
                                             x:Name="personField"
-                                            ToolTip="Искать по всем файлам"
                                             FontSize="18"
                                             Width="200"
                                             Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"
-                                            KeyUp="TextBox_KeyUp"/>
+                                            KeyUp="TextBox_KeyUp">
+                                            <TextBox.ToolTip>
+                                                <StackPanel>
+                                                    <TextBlock Text="Искать по всем файлам и по списку"/>
+                                                    <TextBlock Text="008   -> 8-й район(3 цифры)"/>
+                                                    <TextBlock Text="00025 -> DCK(больше 3-х цифр)"/>
+                                                    <TextBlock Text="НВ17  -> код невозврата(НВ)"/>
+                                                    <TextBlock Text="Иванов -> фамилия"/>
+                                                    
+                                                </StackPanel>
+                                            </TextBox.ToolTip>
+                                        </TextBox>
                                         <Button ToolTip="Очистить поле поиска" Command="{Binding ClearPersonFieldCommand}" Click="Button_Click">
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">

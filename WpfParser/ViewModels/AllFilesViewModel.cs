@@ -14,6 +14,7 @@ using WpfParser.ViewModels.Base;
 using Helpers;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Reflection;
 
 namespace WpfParser.ViewModels
 {
@@ -109,10 +110,15 @@ namespace WpfParser.ViewModels
                     e.Accepted = false;
                     return;
                 }
-
+                
                 var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
                 var expr2 = report.CodeNoReturn != null && report.CodeNoReturn.ToLower().Contains(filterText.ToLower());
-                if (expr1 || expr2) return;
+                // Искать в Dck
+                var expr3 = response.Dck != null && filterText.Length > 3 && response.Dck.ToLower().Contains(filterText.ToLower());
+                // Искать в районе -008
+                var expr4 = response.District != null && filterText.Length == 3 && response.District.ToLower().Contains(filterText.ToLower());
+
+                if (expr1 || expr2 || expr3 || expr4) return;
             }
             e.Accepted = false;
         }
@@ -177,9 +183,14 @@ namespace WpfParser.ViewModels
                 e.Accepted = false;
                 return;
             }
-
+            // Искать по фамилии
             var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
+            // Искать по коду возврата
             var expr2 = report.CodeNoReturn != null && report.CodeNoReturn.ToLower().Contains(filterText.ToLower());
+            int integer;
+            var b = int.TryParse(filterText, out integer);
+            if (b) return;
+            
             if (expr1 || expr2) return;
 
             e.Accepted = false;
@@ -296,6 +307,7 @@ namespace WpfParser.ViewModels
                 }
                 if (rf == null) { return; }
                 ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+                ScanDckAndDistrict();
             }
             UpdateShowingNames();
         }
@@ -309,35 +321,22 @@ namespace WpfParser.ViewModels
 
             if (IsOnlyDis)
             {
-                
-                var index = 0;
                 foreach (var file in ResponseFiles)
                 {
-                    index++;
-                    var tempName = ExtractDckFromName(file);
-                    var tempName2 = ExtractDisFromName(file);
-                    file.VisibleName = $"{tempName2} - {tempName}";
+                    file.VisibleName = $"Район: {file.District} - {file.Dck}";
                 }
             }
             if (IsOnlyDck)
             {
-                var index = 0;
                 foreach (var file in ResponseFiles)
                 {
-                    index++;
-                    var tempName = ExtractDckFromName(file);
-                    var tempName2 = ExtractDisFromName(file);
-                    file.VisibleName = $"{tempName} - Район: {tempName2}";
+                    file.VisibleName = $"{file.Dck} - Район: {file.District}";
                 }
             }
             if (IsAllVisible)
             {
-                var index = 0;
                 foreach (var file in ResponseFiles)
                 {
-                    index++;
-                    var tempName = ExtractDckFromName(file);
-                    var tempName2 = ExtractDisFromName(file);
                     file.VisibleName = file.FileName;
                 }
             }
@@ -453,6 +452,8 @@ namespace WpfParser.ViewModels
                 }
                 ResponseFiles = coll;
                 StatusService.FileCounts = coll.Count;
+
+                ScanDckAndDistrict();
                 UpdateShowingNames();
             }
             catch (Exception ex)
@@ -462,6 +463,15 @@ namespace WpfParser.ViewModels
             }
 
             return true;
+        }
+
+        private void ScanDckAndDistrict()
+        {
+            foreach (var file in ResponseFiles)
+            {
+                file.Dck = ExtractDckFromName(file);
+                file.District = $"{ExtractDisFromName(file)}";
+            }
         }
 
         public AllFilesViewModel()

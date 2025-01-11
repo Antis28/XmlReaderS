@@ -29,6 +29,25 @@ namespace WpfParser.ViewModels
             set => Set(ref _VisibleName, value);
         }
         #endregion
+
+
+        #region Dck : string - Для DCK
+        ///<summary>Для DCK</summary>
+        private string _dck;
+        ///<summary>Для DCK</summary>
+        public string Dck { get => _dck; set => Set(ref _dck, value); }
+        #endregion
+
+        #region District : string - Район
+        ///<summary>Район</summary>
+        private string _District;
+        ///<summary>Район</summary>
+        public string District { get => _District; set => Set(ref _District, value); }
+        #endregion
+
+
+
+
         public IList<ReportToRecipientViewModel> ReportToRecipient { get; set; }
         
     }
