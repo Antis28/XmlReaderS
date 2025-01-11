@@ -159,13 +159,6 @@ namespace WpfParser.ViewModels
         #endregion
 
 
-        /// <summary>
-        /// Список имен файлов
-        /// </summary>
-        private IDictionary<int, string> _fileNames;
-        public IDictionary<int, string> FileNames { get => _fileNames; set => Set(ref _fileNames, value); }
-
-
         #region SelectedFile : ResponseFileViewModel - Выбранный файл xml
         ///<summary>Выбранный файл xml</summary>
         private ResponseFileViewModel _selectedFile;
@@ -353,22 +346,18 @@ namespace WpfParser.ViewModels
 
             if (IsOnlyDis)
             {
-                FileNames.Clear();
+                
                 var index = 0;
                 foreach (var file in ResponseFiles)
                 {
                     index++;
-
                     var tempName = ExtractDckFromName(file);
                     var tempName2 = ExtractDisFromName(file);
                     file.VisibleName = $"{tempName2} - {tempName}";
-
-                    FileNames.Add(index, tempName);
                 }
             }
             if (IsOnlyDck)
             {
-                FileNames.Clear();
                 var index = 0;
                 foreach (var file in ResponseFiles)
                 {
@@ -376,12 +365,10 @@ namespace WpfParser.ViewModels
                     var tempName = ExtractDckFromName(file);
                     var tempName2 = ExtractDisFromName(file);
                     file.VisibleName = $"{tempName} - Район: {tempName2}";
-                    FileNames.Add(index, tempName);
                 }
             }
             if (IsAllVisible)
             {
-                FileNames.Clear();
                 var index = 0;
                 foreach (var file in ResponseFiles)
                 {
@@ -389,7 +376,6 @@ namespace WpfParser.ViewModels
                     var tempName = ExtractDckFromName(file);
                     var tempName2 = ExtractDisFromName(file);
                     file.VisibleName = file.FileName;
-                    FileNames.Add(index, tempName);
                 }
             }
             ResponseFiles = from item in ResponseFiles
@@ -519,10 +505,7 @@ namespace WpfParser.ViewModels
             ClearPersonFieldCommand =
                 new LambdaCommand(OnClearPersonFieldCommandExecuted, CanClearPersonFieldCommandExecute);
             #endregion
-
-
-            _fileNames = new Dictionary<int, string>();
-
+            
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>();
             //CheckVisibleFileName();
 
