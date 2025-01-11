@@ -17,37 +17,7 @@ namespace WpfParser.ViewModels
 {
     internal class AllFilesViewModel : ViewModel
     {
-
-
         
-
-
-
-        #region Видимость закладки консоль
-        #region IsVisibleConsole : bool - Видимость закладки консоль
-        ///<summary>Выбранный файл xml</summary>
-        private Visibility _IsVisibleConsole = Visibility.Collapsed;
-
-        ///<summary>Выбранный файл xml</summary>
-        public Visibility IsVisibleConsole
-        { get => _IsVisibleConsole; set => Set(ref _IsVisibleConsole, value); }
-
-        #endregion
-
-
-        #region CheckVisibleConsoleCommand - Переключить видимость закладки консоль
-
-        ///<summary>Переключить видимость закладки консоль</summary>
-        public ICommand CheckVisibleConsoleCommand { get; }
-
-        private bool CanCheckVisibleConsoleCommandExecute(object p) => true;
-
-        private void OnCheckVisibleConsoleCommandExecuted(object p)
-        {
-            IsVisibleConsole = IsVisibleConsole == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-        }
-        #endregion
-        #endregion
 
 
 
@@ -490,8 +460,7 @@ namespace WpfParser.ViewModels
             DragDropCommand =
                 new LambdaCommand(OnDragDropCommandExecuted, CanDragDropCommandExecute);
 
-            CheckVisibleConsoleCommand =
-                new LambdaCommand(OnCheckVisibleConsoleCommandExecuted, CanCheckVisibleConsoleCommandExecute);
+            
 
             CheckVisibleSearchInFilesCommand =
                 new LambdaCommand(OnCheckVisibleSearchInFilesCommandExecuted, CanCheckVisibleSearchInFilesCommandExecute);
@@ -547,8 +516,8 @@ namespace WpfParser.ViewModels
                 {
                     coll.Add(item);
                 }
-
                 ResponseFiles = coll;
+                StatusService.FileCounts = coll.Count;
                 UpdateShowingNames();
             }
             catch (Exception ex)

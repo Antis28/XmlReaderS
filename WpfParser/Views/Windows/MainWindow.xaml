@@ -21,6 +21,7 @@
         </Style>
         <vm:AllFilesViewModel x:Key="AllXmlFiles"/>
         <vm:ConsoleViewModel x:Key="ConsoleBoxView"/>
+        <vm:StatusViewModel x:Key="StatusViewModel"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource AllXmlFiles }">
         <DockPanel>
@@ -35,23 +36,25 @@
                 <!--<MenuItem Header="Редактировать">
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
                 </MenuItem>-->
-                <MenuItem Header="Показать">
-                    <MenuItem Header="Показать консоль" 
+                <MenuItem Header="Показать" DataContext="{StaticResource ConsoleBoxView}">
+                    <MenuItem Header="Консоль" 
                               IsCheckable="True" 
                               Command="{Binding CheckVisibleConsoleCommand}"/>
-                    <MenuItem Header="Показывать ошибки" 
+                    <MenuItem Header="Ошибки" 
                               IsCheckable="True"
-                              DataContext="{StaticResource ConsoleBoxView}"
-                             
                               Command="{Binding ShowMessageBoxCommand}"
                               />
                 </MenuItem>
 
 
             </Menu>
-            <StatusBar DockPanel.Dock="Bottom" Height="10">
+            <StatusBar DockPanel.Dock="Bottom" MinHeight="20">
                 <StatusBarItem >
-                    <!--<TextBlock Text="{Binding Status}" MinWidth="150" MaxWidth="350"/>-->
+                    <TextBlock d:DataContext="{StaticResource StatusViewModel}" 
+                               DataContext="{StaticResource StatusViewModel}"  
+                               Text="{Binding FileCounts}" 
+                               MinWidth="150" MaxWidth="350"
+                               Margin="2"/>
                 </StatusBarItem>
                 <StatusBarItem >
                     <ProgressBar
@@ -287,7 +290,7 @@
                         </GroupBox>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Консоль" Visibility="{Binding IsVisibleConsole}">
+                <TabItem Header="Консоль" DataContext="{StaticResource ConsoleBoxView}" Visibility="{Binding IsVisibleConsole}">
                     <ListBox x:Name="consoleBox" 
                              DataContext="{StaticResource ConsoleBoxView}"
                              ItemsSource="{Binding ConsoleBoxView}"

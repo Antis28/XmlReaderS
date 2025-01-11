@@ -71,6 +71,7 @@
     <Compile Include="Models\ConsoleMessage.cs" />
     <Compile Include="Services\ConsoleService.cs" />
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\StatusService.cs" />
     <Compile Include="ViewModels\AllFilesViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Page Include="Views\Windows\MainWindow.xaml">
@@ -84,6 +85,7 @@
     <Compile Include="ViewModels\ConsoleViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\StatusViewModel.cs" />
     <Compile Include="Views\Extended\ExtendedTreeView.cs" />
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

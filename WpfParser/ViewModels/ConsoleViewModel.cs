@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WpfParser.Infrastructure.Commands;
 using WpfParser.Models;
@@ -20,8 +21,6 @@ namespace WpfParser.ViewModels
         ///<summary>ConsoleBox</summary>
         public ObservableCollection<ConsoleMessage> ConsoleBoxView { get => _consoleBoxView; set => Set(ref _consoleBoxView, value); }
         #endregion
-
-
         
         #region ShowMessageBoxCommand - Показывать всплывающее сообщение ?
 
@@ -36,8 +35,32 @@ namespace WpfParser.ViewModels
         }
         #endregion
 
-        
 
+        #region Видимость закладки консоль
+        #region IsVisibleConsole : bool - Видимость закладки консоль
+        ///<summary>Выбранный файл xml</summary>
+        private Visibility _isVisibleConsole = Visibility.Collapsed;
+
+        ///<summary>Выбранный файл xml</summary>
+        public Visibility IsVisibleConsole
+        { get => _isVisibleConsole; set => Set(ref _isVisibleConsole, value); }
+
+        #endregion
+
+        #endregion
+
+        #region CheckVisibleConsoleCommand - Переключить видимость закладки консоль
+
+        ///<summary>Переключить видимость закладки консоль</summary>
+        public ICommand CheckVisibleConsoleCommand { get; }
+
+        private bool CanCheckVisibleConsoleCommandExecute(object p) => true;
+
+        private void OnCheckVisibleConsoleCommandExecuted(object p)
+        {
+            IsVisibleConsole = IsVisibleConsole == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+        #endregion
 
 
 
@@ -46,7 +69,10 @@ namespace WpfParser.ViewModels
             ConsoleBoxView = new ObservableCollection<ConsoleMessage>();
             ConsoleService.SetObservableCollection(ConsoleBoxView);
 
-            ShowMessageBoxCommand = new LambdaCommand(OnShowMessageBoxCommandExecuted, CanShowMessageBoxCommandExecute);
+            ShowMessageBoxCommand = 
+                new LambdaCommand(OnShowMessageBoxCommandExecuted, CanShowMessageBoxCommandExecute);
+            CheckVisibleConsoleCommand =
+                new LambdaCommand(OnCheckVisibleConsoleCommandExecuted, CanCheckVisibleConsoleCommandExecute);
         }
     }
 }

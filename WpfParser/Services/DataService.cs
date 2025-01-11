@@ -43,7 +43,7 @@ namespace WpfParser.Services
                     ConsoleService.GetInstance().ShowMessage($"Ошибка чтения файла:\n {path}", ex.Message);
                 }
             }
-
+            
             return file;
         }
 
