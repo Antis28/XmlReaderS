@@ -10,12 +10,10 @@
         xmlns:ext="clr-namespace:WpfParser.Views.Extended"
         xmlns:cmd="clr-namespace:WpfParser.Infrastructure.Commands"
         
-        
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:base="clr-namespace:WpfParser.Infrastructure.Commands.Base"
         FontSize="16"
         Title="Парсер файлов XML" Height="450" Width="1100">
-
     <Window.Resources>
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
         <Style TargetType="{x:Type MenuItem}">
@@ -37,8 +35,18 @@
                 <!--<MenuItem Header="Редактировать">
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
                 </MenuItem>-->
+                <MenuItem Header="Показать">
+                    <MenuItem Header="Показать консоль" 
+                              IsCheckable="True" 
+                              Command="{Binding CheckVisibleConsoleCommand}"/>
+                    <MenuItem Header="Показывать ошибки" 
+                              IsCheckable="True"
+                              DataContext="{StaticResource ConsoleBoxView}"
+                             
+                              Command="{Binding ShowMessageBoxCommand}"
+                              />
+                </MenuItem>
 
-                <MenuItem Header="Консоль" Command="{Binding CheckVisibleConsoleCommand}"></MenuItem>
 
             </Menu>
             <StatusBar DockPanel.Dock="Bottom" Height="10">

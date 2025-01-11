@@ -11,6 +11,8 @@ namespace WpfParser.Services
 {
     internal class ConsoleService
     {
+        public static bool IsShowMessageBox { get; set; } = false;
+
         // Коллекция для отображения в WPF
         private ObservableCollection<ConsoleMessage> _consoleBoxView;
 
@@ -43,7 +45,12 @@ namespace WpfParser.Services
                 Description = "Описание ошибки: " + message
             };
             _consoleBoxView.Add(cMessage);
-            MessageBox.Show($"{cMessage.Name}\n{cMessage.Description}", cMessage.Name, MessageBoxButton.OK);
+
+            if (IsShowMessageBox)
+            {
+                MessageBox.Show($"{cMessage.Name}\n{cMessage.Description}", cMessage.Name, MessageBoxButton.OK);
+            }
+
         }
     }
 }

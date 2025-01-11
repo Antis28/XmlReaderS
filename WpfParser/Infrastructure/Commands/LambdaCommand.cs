@@ -10,7 +10,7 @@ namespace WpfParser.Infrastructure.Commands
         private readonly Func<object, bool> _canExecute;
 
         public LambdaCommand(Action<object> execute, Func<object,bool> canExecute = null)
-        {  
+        {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
