@@ -34,13 +34,13 @@ namespace WpfParser.Services
                         try { numberRecipient = ProcessXml(reader, file, ref numberRecipient); }
                         catch (Exception ex)
                         {
-                            ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла:\n {path}", ex.Message);
+                            ConsoleService.GetInstance().ShowMessage($"Ошибка во время чтения файла:\n {path}", ex.Message);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла:\n {path}", ex.Message);
+                    ConsoleService.GetInstance().ShowMessage($"Ошибка чтения файла:\n {path}", ex.Message);
                 }
             }
 
