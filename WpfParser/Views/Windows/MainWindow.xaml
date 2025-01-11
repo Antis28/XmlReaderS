@@ -61,8 +61,7 @@
                         Name="pb"
                         Height="8"
                         Width="190"
-                        Foreground="#47BDFF"
-                        Value="100"
+                        Value="{Binding UploadProgress}"
                     />
                 </StatusBarItem>
             </StatusBar>

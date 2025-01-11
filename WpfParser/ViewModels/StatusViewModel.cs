@@ -24,7 +24,7 @@ namespace WpfParser.ViewModels
 
         public StatusViewModel()
         {
-            StatusService.SetObservableProperty(  this);
+            StatusService.SetStatusProperty(  this);
             StatusService.FileCounts = 0;
         }
     }

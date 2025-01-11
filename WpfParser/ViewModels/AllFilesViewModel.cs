@@ -12,12 +12,21 @@ using WpfParser.Models;
 using WpfParser.Services;
 using WpfParser.ViewModels.Base;
 using Helpers;
+using System.Diagnostics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WpfParser.ViewModels
 {
     internal class AllFilesViewModel : ViewModel
     {
-        
+
+
+        #region UploadProgress : int - Значение прогресса загрузки
+        ///<summary>Значение прогресса загрузки</summary>
+        private int _uploadProgress;
+        ///<summary>Значение прогресса загрузки</summary>
+        public int UploadProgress { get => _uploadProgress; set => Set(ref _uploadProgress, value); }
+        #endregion
 
 
 
@@ -415,76 +424,23 @@ namespace WpfParser.ViewModels
         #endregion
 
 
-        #region DragDropCommand - Gets and Sets the ICommand that manages dragging and dropping.
-
-        ///<summary>For drag and drop</summary>
-        public ICommand DragDropCommand { get; }
-
-        private bool CanDragDropCommandExecute(object p) => true;
-
-        private void OnDragDropCommandExecuted(object p)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        #endregion
-
-
-
-
-
-
-        public AllFilesViewModel()
-        {
-            #region Команды
-
-            OnlyDckCommand =
-                new LambdaCommand(OnOnlyDckCommandExecuted, CanOnlyDckCommandExecute);
-            AllVisibleCommand =
-                new LambdaCommand(OnAllVisibleCommandExecuted, CanAllVisibleCommandExecute);
-            OnlyDisCommand
-                =
-                new LambdaCommand(OnOnlyDisCommandExecuted, CanOnlyDisCommandExecute);
-            CheckVisibleFileNameCommand =
-                new LambdaCommand(OnCheckVisibleFileNameCommandExecuted, CanCheckVisibleFileNameCommandExecute);
-
-            LoadBaseCommand =
-                new LambdaCommand(OnLoadBaseCommandExecuted, CanLoadBaseCommandExecute);
-
-            ClearBaseCommand =
-                new LambdaCommand(OnClearBaseCommandExecuted, CanClearBaseCommandExecute);
-
-            DragDropCommand =
-                new LambdaCommand(OnDragDropCommandExecuted, CanDragDropCommandExecute);
-
-            
-
-            CheckVisibleSearchInFilesCommand =
-                new LambdaCommand(OnCheckVisibleSearchInFilesCommandExecuted, CanCheckVisibleSearchInFilesCommandExecute);
-
-            ClearPersonFieldCommand =
-                new LambdaCommand(OnClearPersonFieldCommandExecuted, CanClearPersonFieldCommandExecute);
-            #endregion
-            
-            ResponseFiles = new ObservableCollection<ResponseFileViewModel>();
-            //CheckVisibleFileName();
-
-            _selectedXmlFileCollection.Filter += OnPersonFiltered;
-            _fileXmlCollection.Filter += OnPersonFilterAllFiles;
-
-
-        }
-
-
+        
         public bool LoadFilesInBase(string[] addedElements)
         {
             if (addedElements == null) return false;
             try
             {
                 List<string> fileNames = new List<string>();
+                
+                var progressLoading = 0;
+                var oldProgress = 0;
+                var currentPosition = 0;
+                var contentLength = addedElements.Length;
+
+                
                 foreach (string fileName in addedElements)
                 {
+                    currentPosition++;
                     var isDirectory = fileName.IsDirectory();
                     var isXmlFile = Path.GetExtension(fileName).ToLower() == ".xml";
                     if (isDirectory)
@@ -498,6 +454,12 @@ namespace WpfParser.ViewModels
                         // Переданный элемент является файлом
                         fileNames.Add(fileName);
                     }
+
+                    oldProgress = progressLoading;
+                    progressLoading = (int)(currentPosition * 100 / contentLength);
+                    // так как значение от 0 до 100, нет особого смысла повтороно обновлять интерфейс, если значение не изменилось.
+                    if (oldProgress != progressLoading)
+                        StatusService.ProgressLoading = progressLoading;
                 }
 
                 var rf = DataService.ReadResponseFiles(fileNames.ToArray());
@@ -525,6 +487,42 @@ namespace WpfParser.ViewModels
             }
 
             return true;
+        }
+
+        public AllFilesViewModel()
+        {
+            #region Команды
+
+            OnlyDckCommand =
+                new LambdaCommand(OnOnlyDckCommandExecuted, CanOnlyDckCommandExecute);
+            AllVisibleCommand =
+                new LambdaCommand(OnAllVisibleCommandExecuted, CanAllVisibleCommandExecute);
+            OnlyDisCommand
+                =
+                new LambdaCommand(OnOnlyDisCommandExecuted, CanOnlyDisCommandExecute);
+            CheckVisibleFileNameCommand =
+                new LambdaCommand(OnCheckVisibleFileNameCommandExecuted, CanCheckVisibleFileNameCommandExecute);
+
+            LoadBaseCommand =
+                new LambdaCommand(OnLoadBaseCommandExecuted, CanLoadBaseCommandExecute);
+
+            ClearBaseCommand =
+                new LambdaCommand(OnClearBaseCommandExecuted, CanClearBaseCommandExecute);
+
+            CheckVisibleSearchInFilesCommand =
+                new LambdaCommand(OnCheckVisibleSearchInFilesCommandExecuted, CanCheckVisibleSearchInFilesCommandExecute);
+
+            ClearPersonFieldCommand =
+                new LambdaCommand(OnClearPersonFieldCommandExecuted, CanClearPersonFieldCommandExecute);
+            #endregion
+
+            ResponseFiles = new ObservableCollection<ResponseFileViewModel>();
+            //CheckVisibleFileName();
+
+            _selectedXmlFileCollection.Filter += OnPersonFiltered;
+            _fileXmlCollection.Filter += OnPersonFilterAllFiles;
+
+            StatusService.SetFilesProperty(this);
         }
     }
 }

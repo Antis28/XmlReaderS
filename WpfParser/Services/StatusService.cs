@@ -15,6 +15,7 @@ namespace WpfParser.Services
     {
 
         private static ViewModel _status;
+        private static ViewModel _allFiles;
 
         public static int FileCounts
         {
@@ -30,10 +31,28 @@ namespace WpfParser.Services
             }
         }
 
+        public static int ProgressLoading
+        {
+            get
+            {
+                var s = (AllFilesViewModel)_allFiles;
+                return s.UploadProgress;
+            }
+            set
+            {
+                var s = (AllFilesViewModel)_allFiles;
+                s.UploadProgress = value;
+            }
+        }
 
-        public static void SetObservableProperty(ViewModel sModel)
+
+        public static void SetStatusProperty(ViewModel sModel)
         {
             _status = sModel;
+        }
+        public static void SetFilesProperty(ViewModel allFiles)
+        {
+            _allFiles = allFiles;
         }
     }
 }
