@@ -27,83 +27,98 @@ namespace WpfParser.Services
             using (XmlReader reader = XmlReader.Create(path))
             {
                 var numberRecipient = -1; //номер ОтчетПоПолучателю
-                while (reader.Read())     // чтение некст элемента
+                try
                 {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ИмяФайла")
+                    while (reader.Read())     // чтение некст элемента
                     {
-                        file.FileName = reader.ReadElementContentAsString();
+                        try { numberRecipient = ProcessXml(reader, file, ref numberRecipient); }
+                        catch (Exception ex)
+                        {
+                            ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла:\n {path}", ex.Message);
+                        }
                     }
-
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ОтчетПоПолучателю")
-                    {
-                        numberRecipient++;
-                        file.ReportToRecipient.Add(new ReportToRecipientViewModel());
-                        file.ReportToRecipient[numberRecipient].Payment = new Payment();
-                    }
-
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодРайона")
-                    {
-                        file.ReportToRecipient[numberRecipient].AreaCode = reader.ReadElementContentAsString();
-                    }
-
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "СтраховойНомер")
-                    {
-                        file.ReportToRecipient[numberRecipient].Snils = reader.ReadElementContentAsString();
-                    }
-
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "Фамилия")
-                    {
-                        file.ReportToRecipient[numberRecipient].Surname = reader.ReadElementContentAsString();
-                    }
-
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "Имя")
-                    {
-                        file.ReportToRecipient[numberRecipient].Name = reader.ReadElementContentAsString();
-                    }
-
-                    
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "Отчество")
-                    {
-                        file.ReportToRecipient[numberRecipient].Patronymic = reader.ReadElementContentAsString();
-                    }
-
-                    
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаСмерти")
-                    {
-                        file.ReportToRecipient[numberRecipient].DateOfDeath = reader.ReadElementContentAsString();
-                    }
-
-                    
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ОтзываемаяСумма")
-                    {
-                        file.ReportToRecipient[numberRecipient].SumRecalled = reader.ReadElementContentAsString();
-                    }
-
-                    
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодНевозврата")
-                    {
-                        file.ReportToRecipient[numberRecipient].CodeNoReturn = reader.ReadElementContentAsString();
-                    }
-
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаНачалаПериода")
-                    {
-                        file.ReportToRecipient[numberRecipient].Payment.StartDateOfPeriod = reader.ReadElementContentAsString();
-                    }
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаКонцаПериода")
-                    {
-                        file.ReportToRecipient[numberRecipient].Payment.EndDateOfPeriod = reader.ReadElementContentAsString();
-                    }
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "НомерСчета")
-                    {
-                        file.ReportToRecipient[numberRecipient].Payment.AccountNumber = reader.ReadElementContentAsString();
-                    }
-
-                    
-
+                }
+                catch (Exception ex)
+                {
+                    ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла:\n {path}", ex.Message);
                 }
             }
 
             return file;
+        }
+
+        private static int ProcessXml(XmlReader reader, ResponseFileViewModel file, ref int numberRecipient)
+        {
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ИмяФайла")
+            {
+                file.FileName = reader.ReadElementContentAsString();
+            }
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ОтчетПоПолучателю")
+            {
+                numberRecipient++;
+                file.ReportToRecipient.Add(new ReportToRecipientViewModel());
+                file.ReportToRecipient[numberRecipient].Payment = new Payment();
+            }
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодРайона")
+            {
+                file.ReportToRecipient[numberRecipient].AreaCode = reader.ReadElementContentAsString();
+            }
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "СтраховойНомер")
+            {
+                file.ReportToRecipient[numberRecipient].Snils = reader.ReadElementContentAsString();
+            }
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "Фамилия")
+            {
+                file.ReportToRecipient[numberRecipient].Surname = reader.ReadElementContentAsString();
+            }
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "Имя")
+            {
+                file.ReportToRecipient[numberRecipient].Name = reader.ReadElementContentAsString();
+            }
+
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "Отчество")
+            {
+                file.ReportToRecipient[numberRecipient].Patronymic = reader.ReadElementContentAsString();
+            }
+
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаСмерти")
+            {
+                file.ReportToRecipient[numberRecipient].DateOfDeath = reader.ReadElementContentAsString();
+            }
+
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ОтзываемаяСумма")
+            {
+                file.ReportToRecipient[numberRecipient].SumRecalled = reader.ReadElementContentAsString();
+            }
+
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодНевозврата")
+            {
+                file.ReportToRecipient[numberRecipient].CodeNoReturn = reader.ReadElementContentAsString();
+            }
+
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаНачалаПериода")
+            {
+                file.ReportToRecipient[numberRecipient].Payment.StartDateOfPeriod = reader.ReadElementContentAsString();
+            }
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаКонцаПериода")
+            {
+                file.ReportToRecipient[numberRecipient].Payment.EndDateOfPeriod = reader.ReadElementContentAsString();
+            }
+            if (reader.NodeType == XmlNodeType.Element && reader.Name == "НомерСчета")
+            {
+                file.ReportToRecipient[numberRecipient].Payment.AccountNumber = reader.ReadElementContentAsString();
+            }
+
+            return numberRecipient;
         }
 
         public static IEnumerable<ResponseFileViewModel> ReadResponseFiles()
@@ -117,16 +132,8 @@ namespace WpfParser.Services
             var files = new List<ResponseFileViewModel>();
             foreach (var xmlFile in fileNames)
             {
-                try
-                {
-                    var file = ReadResponseFile(xmlFile);
-                    files.Add(file);
-                }
-                catch (Exception ex)
-                {
-                    ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла:\n {xmlFile}", ex.Message);
-                }
-
+                var file = ReadResponseFile(xmlFile);
+                files.Add(file);
             }
 
             return files;
