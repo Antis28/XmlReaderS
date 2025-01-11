@@ -19,17 +19,6 @@ namespace WpfParser.ViewModels
 {
     internal class AllFilesViewModel : ViewModel
     {
-
-
-        #region UploadProgress : int - Значение прогресса загрузки
-        ///<summary>Значение прогресса загрузки</summary>
-        private int _uploadProgress;
-        ///<summary>Значение прогресса загрузки</summary>
-        public int UploadProgress { get => _uploadProgress; set => Set(ref _uploadProgress, value); }
-        #endregion
-
-
-
         #region Видимость поля поиска по файлам
         #region IsVisibleConsole : bool - Видимость поля поиска по файлам
         ///<summary>Выбранный файл xml</summary>
@@ -432,15 +421,8 @@ namespace WpfParser.ViewModels
             {
                 List<string> fileNames = new List<string>();
                 
-                var progressLoading = 0;
-                var oldProgress = 0;
-                var currentPosition = 0;
-                var contentLength = addedElements.Length;
-
-                
                 foreach (string fileName in addedElements)
                 {
-                    currentPosition++;
                     var isDirectory = fileName.IsDirectory();
                     var isXmlFile = Path.GetExtension(fileName).ToLower() == ".xml";
                     if (isDirectory)
@@ -454,16 +436,9 @@ namespace WpfParser.ViewModels
                         // Переданный элемент является файлом
                         fileNames.Add(fileName);
                     }
-
-                    oldProgress = progressLoading;
-                    progressLoading = (int)(currentPosition * 100 / contentLength);
-                    // так как значение от 0 до 100, нет особого смысла повтороно обновлять интерфейс, если значение не изменилось.
-                    if (oldProgress != progressLoading)
-                        StatusService.ProgressLoading = progressLoading;
                 }
-
+                
                 var rf = DataService.ReadResponseFiles(fileNames.ToArray());
-
 
                 var coll = new ObservableCollection<ResponseFileViewModel>();
                 
@@ -522,7 +497,7 @@ namespace WpfParser.ViewModels
             _selectedXmlFileCollection.Filter += OnPersonFiltered;
             _fileXmlCollection.Filter += OnPersonFilterAllFiles;
 
-            StatusService.SetFilesProperty(this);
+            
         }
     }
 }

@@ -35,13 +35,26 @@ namespace WpfParser.Services
         {
             get
             {
-                var s = (AllFilesViewModel)_allFiles;
+                var s = (StatusViewModel)_allFiles;
                 return s.UploadProgress;
             }
             set
             {
-                var s = (AllFilesViewModel)_allFiles;
+                var s = (StatusViewModel)_allFiles;
                 s.UploadProgress = value;
+            }
+        }
+        public static string FileSize
+        {
+            get
+            {
+                var s = (StatusViewModel)_allFiles;
+                return s.FileSize;
+            }
+            set
+            {
+                var s = (StatusViewModel)_allFiles;
+                s.FileSize = value;
             }
         }
 

@@ -9,7 +9,7 @@
         xmlns:models="clr-namespace:WpfParser.Models"
         xmlns:ext="clr-namespace:WpfParser.Views.Extended"
         xmlns:cmd="clr-namespace:WpfParser.Infrastructure.Commands"
-        
+        x:Name="_this"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:base="clr-namespace:WpfParser.Infrastructure.Commands.Base"
         FontSize="16"
@@ -30,8 +30,8 @@
                     <MenuItem Header="Открыть файл" Click="OpenFileItemOnClick"></MenuItem>
                     <MenuItem Header="Загрузить все файлы рядом" Command="{Binding LoadBaseCommand  }" />
                     <MenuItem Header="Очистить список" Command="{Binding ClearBaseCommand  }" />
-                    <MenuItem Header="Показать поиск по файлам" Command="{Binding CheckVisibleSearchInFilesCommand  }" />
-                    <!--<MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>-->
+                    <Separator></Separator>
+                    <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                 </MenuItem>
                 <!--<MenuItem Header="Редактировать">
                     <MenuItem Header="Обновить" Command="{Binding CheckVisibleFileNameCommand }"/>
@@ -44,6 +44,10 @@
                               IsCheckable="True"
                               Command="{Binding ShowMessageBoxCommand}"
                               />
+                    <MenuItem IsCheckable="True" 
+                              Header="Поиск по файлам" 
+                              DataContext="{StaticResource AllXmlFiles}"
+                              Command="{Binding CheckVisibleSearchInFilesCommand  }" />
                 </MenuItem>
 
 
@@ -61,8 +65,10 @@
                         Name="pb"
                         Height="8"
                         Width="190"
+                        DataContext="{StaticResource StatusViewModel}"
                         Value="{Binding UploadProgress}"
                     />
+
                 </StatusBarItem>
             </StatusBar>
             <TabControl>
@@ -86,11 +92,11 @@
 
                                 </DockPanel>
                                 <StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal">
-                                    <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsAllVisible}" Command="{Binding AllVisibleCommand }" Content="Все"  ></RadioButton>
-                                    <RadioButton FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="DCK код"  ></RadioButton>
-                                    <RadioButton FontSize="12"  IsChecked="{Binding IsOnlyDis}" Command="{Binding OnlyDisCommand }" Content="Район"  ></RadioButton>
+                                    <RadioButton ToolTip="Посмотреть название файла?"  FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsAllVisible}" Command="{Binding AllVisibleCommand }" Content="Все"  ></RadioButton>
+                                    <RadioButton ToolTip="Сортируй список по DCK" FontSize="12"  Margin="0,0,10,0"  IsChecked="{Binding IsOnlyDck}" Command="{Binding OnlyDckCommand }" Content="DCK код"  ></RadioButton>
+                                    <RadioButton ToolTip="Сортировать список по району" FontSize="12"  IsChecked="{Binding IsOnlyDis}" Command="{Binding OnlyDisCommand }" Content="Район"  ></RadioButton>
                                 </StackPanel>
-                                <ListBox x:Name="fileListBox" Grid.Row="2" VerticalAlignment="Stretch"
+                                <ListBox ToolTip="Щелкни по строке, чтобы отобразить файл справа" x:Name="fileListBox" Grid.Row="2" VerticalAlignment="Stretch"
                                          IsSynchronizedWithCurrentItem="True"
                                          ItemsSource="{Binding FileXmlCollection, Mode=OneWay }"
                                          SelectedItem="{Binding SelectedFile}"
@@ -106,7 +112,7 @@
                                 <Rectangle 
                                     x:Name="RectangleDrop"
                                     Drop="SetDropCommand"
-                                    
+                                    ToolTip="Перетащи сюда файл для его загрузки"
                                     AllowDrop="True"
                                     Grid.Row="3"
                                     Fill="WhiteSmoke"
@@ -170,11 +176,12 @@
                                         <TextBlock Visibility="Collapsed" Margin="5,0" Text="Поиск по списку"  HorizontalAlignment="Left"/>
                                         <TextBox
                                             x:Name="personField"
+                                            ToolTip="Искать по всем файлам"
                                             FontSize="18"
                                             Width="200"
                                             Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"
                                             KeyUp="TextBox_KeyUp"/>
-                                        <Button Command="{Binding ClearPersonFieldCommand}" Click="Button_Click">
+                                        <Button ToolTip="Очистить поле поиска" Command="{Binding ClearPersonFieldCommand}" Click="Button_Click">
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">
                                                     <Border CornerRadius="7"
@@ -230,6 +237,24 @@
                                             >
                                                 <Path.Data>
                                                     <PathGeometry Figures="M 17.414 16 L 26 7.414 L 24.586 6 L 16 14.586 L 7.414 6 L 6 7.414 L 14.586 16 L 6 24.586 L 7.414 26 L 16 17.414 L 24.586 26 L 26 24.586 z" FillRule="Nonzero"/>
+                                                </Path.Data>
+                                            </Path>
+                                        </Button>
+                                        <Button ToolTip="Очистить список" Margin="20,0" HorizontalAlignment="Left" Command="{Binding ClearBaseCommand  }">
+                                            <Path 
+                                                   HorizontalAlignment="Center" 
+                                                   Stretch="Fill" 
+                                                   Height="20" 
+                                                   Width="20" 
+                                                   Margin="0"
+                                                   Stroke="#ff000000"
+                                                   StrokeThickness="2.0"
+                                                   StrokeDashCap="Flat"
+                                                   StrokeDashArray=""
+        
+                                            >
+                                                <Path.Data>
+                                                    <PathGeometry Figures="M 4 22 v -5.865 q 0 -1.836 1.294 -3.13 t 3.13 -1.293 h 1.288 V 3.635 q 0 -0.675 0.462 -1.155 q 0.463 -0.48 1.134 -0.48 h 1.384 q 0.671 0 1.134 0.48 t 0.462 1.155 v 8.077 h 1.27 q 1.843 0 3.143 1.293 T 20 16.135 V 22 z m 1 -1 h 2.75 v -3.52 q 0 -0.212 0.144 -0.355 q 0.144 -0.144 0.357 -0.144 q 0.212 0 0.356 0.144 t 0.143 0.356 V 21 h 2.75 v -3.52 q 0 -0.212 0.144 -0.355 q 0.144 -0.144 0.357 -0.144 t 0.356 0.144 t 0.143 0.356 V 21 h 2.75 v -3.52 q 0 -0.212 0.144 -0.355 t 0.357 -0.144 t 0.356 0.144 t 0.143 0.356 V 21 H 19 v -4.865 q 0 -1.443 -1.004 -2.433 t -2.438 -0.99 H 8.423 q -1.426 0 -2.425 0.998 T 5 16.135 z" FillRule="Nonzero"/>
                                                 </Path.Data>
                                             </Path>
                                         </Button>

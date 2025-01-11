@@ -5,10 +5,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Forms.Design;
 
 namespace WpfParser.ViewModels.Base
 {
-    internal abstract class ViewModel : INotifyPropertyChanged, IDisposable
+    internal abstract class ViewModel : UserControl, INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

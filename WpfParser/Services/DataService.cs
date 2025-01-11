@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -129,13 +130,26 @@ namespace WpfParser.Services
 
         public static IEnumerable<ResponseFileViewModel> ReadResponseFiles(string[] fileNames)
         {
+            var progressLoading = 0;
+            var oldProgress = 0;
+            var currentPosition = 0;
+            var contentLength = fileNames.Length;
+
             var files = new List<ResponseFileViewModel>();
             foreach (var xmlFile in fileNames)
             {
+                currentPosition++;
                 var file = ReadResponseFile(xmlFile);
                 files.Add(file);
-            }
 
+                oldProgress = progressLoading;
+                progressLoading = (int)(currentPosition * 100 / contentLength);
+                //так как значение от 0 до 100, нет особого смысла повтороно обновлять интерфейс, если значение не изменилось.
+                if (oldProgress != progressLoading)
+                    StatusService.ProgressLoading = progressLoading;
+            }
+            double ratioBytesOnMb = 1.049e+6;
+            StatusService.FileSize = $"{(100000 / ratioBytesOnMb):0.0} Mb";
             return files;
         }
 
