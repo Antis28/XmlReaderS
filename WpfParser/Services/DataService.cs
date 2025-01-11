@@ -79,7 +79,7 @@ namespace WpfParser.Services
 
             if (reader.NodeType == XmlNodeType.Element && reader.Name == "Имя")
             {
-                file.ReportToRecipient[numberRecipient].Name = reader.ReadElementContentAsString();
+                file.ReportToRecipient[numberRecipient].NamePerson = reader.ReadElementContentAsString();
             }
 
 

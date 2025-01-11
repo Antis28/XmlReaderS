@@ -22,6 +22,9 @@
         <vm:AllFilesViewModel x:Key="AllXmlFiles"/>
         <vm:ConsoleViewModel x:Key="ConsoleBoxView"/>
         <vm:StatusViewModel x:Key="StatusViewModel"/>
+        <vm:ReportToRecipientViewModel x:Key="ReportToRecipientViewModel"/>
+
+
     </Window.Resources>
     <Grid DataContext="{StaticResource AllXmlFiles }">
         <DockPanel>
@@ -261,7 +264,7 @@
                                     </StackPanel>
                                 </DockPanel>
                                 <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 
-                                          DataContext="{StaticResource AllXmlFiles}"
+                                          
                                           AutoGenerateColumns="False" 
                                           CanUserAddRows="False"
                                           CanUserSortColumns ="true"
@@ -271,10 +274,10 @@
                                           VerticalGridLinesBrush="DarkGray"
                                           AlternatingRowBackground="LightGray"
                                 >
-                                    <DataGrid.Columns>
+                                    <DataGrid.Columns >
                                         <DataGridTextColumn Header="Код невозврата" Binding="{Binding CodeNoReturn}"  Width="Auto"  IsReadOnly="False"/>
                                         <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
+                                        <DataGridTextColumn  Header="Имя" Binding="{Binding NamePerson, FallbackValue=Name}" IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
 
 
