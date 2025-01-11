@@ -115,5 +115,11 @@
   <ItemGroup>
     <Resource Include="istockphoto-1731612790-1024x1024.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Helpers\Helpers.csproj">
+      <Project>{67cfba37-fe0a-4f39-b615-ac2a08b46771}</Project>
+      <Name>Helpers</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

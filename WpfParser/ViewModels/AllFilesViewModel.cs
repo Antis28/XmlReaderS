@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
@@ -11,6 +11,7 @@ using WpfParser.Infrastructure.Commands;
 using WpfParser.Models;
 using WpfParser.Services;
 using WpfParser.ViewModels.Base;
+using Helpers;
 
 namespace WpfParser.ViewModels
 {
@@ -28,7 +29,7 @@ namespace WpfParser.ViewModels
 
 
         #region Видимость закладки консоль
-            #region IsVisibleConsole : bool - Видимость закладки консоль
+        #region IsVisibleConsole : bool - Видимость закладки консоль
         ///<summary>Выбранный файл xml</summary>
         private Visibility _IsVisibleConsole = Visibility.Collapsed;
 
@@ -36,10 +37,10 @@ namespace WpfParser.ViewModels
         public Visibility IsVisibleConsole
         { get => _IsVisibleConsole; set => Set(ref _IsVisibleConsole, value); }
 
-            #endregion
+        #endregion
 
 
-            #region CheckVisibleConsoleCommand - Переключить видимость закладки консоль
+        #region CheckVisibleConsoleCommand - Переключить видимость закладки консоль
 
         ///<summary>Переключить видимость закладки консоль</summary>
         public ICommand CheckVisibleConsoleCommand { get; }
@@ -198,7 +199,7 @@ namespace WpfParser.ViewModels
             set
             {
                 if (!Set(ref _personFilterText, value)) return;
-                
+
                 _selectedXmlFileCollection?.View?.Refresh();
                 FilesFilterText = value;
 
@@ -520,5 +521,54 @@ namespace WpfParser.ViewModels
         }
 
 
+        public bool LoadFilesInBase(string[] addedElements)
+        {
+            if (addedElements == null) return false;
+            try
+            {
+                List<string> fileNames = new List<string>();
+                foreach (string fileName in addedElements)
+                {
+                    var isDirectory = fileName.IsDirectory();
+                    var isXmlFile = Path.GetExtension(fileName).ToLower() == ".xml";
+                    if (isDirectory)
+                    {
+                        // Переданный элемент является каталогом
+                        var files = Directory.GetFiles(fileName, "*.xml", SearchOption.AllDirectories);
+                        fileNames.AddRange(files);
+                    }
+                    else
+                    {
+                        // Переданный элемент является файлом
+                        fileNames.Add(fileName);
+                    }
+                }
+
+                var rf = DataService.ReadResponseFiles(fileNames.ToArray());
+
+
+                var coll = new ObservableCollection<ResponseFileViewModel>();
+                
+                foreach (var item in ResponseFiles)
+                {
+                    coll.Add(item);
+                }
+
+                foreach (var item in rf)
+                {
+                    coll.Add(item);
+                }
+
+                ResponseFiles = coll;
+                UpdateShowingNames();
+            }
+            catch (Exception ex)
+            {
+                ConsoleService.GetInstance().ShowMessage("Произошла ошибка!", ex.Message);
+                return false;
+            }
+
+            return true;
+        }
     }
 }

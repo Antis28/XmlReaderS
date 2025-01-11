@@ -50,10 +50,8 @@ namespace WpfParser
 
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            if (LoadNewFilesInBase(files)) return;
-
-
-            base.OnDrop(e);
+            var allFilesViewModel = fileListBox.DataContext as AllFilesViewModel;
+            allFilesViewModel?.LoadFilesInBase(files);
         }
 
 
@@ -78,55 +76,10 @@ namespace WpfParser
 
             //Get selected files
             string[] files = openFileDialog.FileNames;
+            
 
-            LoadNewFilesInBase(files);
-        }
-
-        private bool LoadNewFilesInBase(string[] files)
-        {
             var allFilesViewModel = fileListBox.DataContext as AllFilesViewModel;
-            string[] fileNames = null;
-            try
-            {
-                if (Path.HasExtension(files[0]))
-                {
-                    fileNames = files;
-                }
-                else
-                {
-                    fileNames = Directory.GetFiles(Environment.CurrentDirectory, "*.xml", SearchOption.AllDirectories);
-                }
-
-
-                var rf = DataService.ReadResponseFiles(fileNames);
-                if (allFilesViewModel == null) return false;
-
-                var t = allFilesViewModel.ResponseFiles;
-
-
-                var coll = new ObservableCollection<ResponseFileViewModel>();
-
-                foreach (var item in t)
-                {
-                    coll.Add(item);
-                }
-
-                foreach (var item in rf)
-                {
-                    coll.Add(item);
-                }
-
-                allFilesViewModel.ResponseFiles = coll;
-                allFilesViewModel.UpdateShowingNames();
-
-            }
-            catch (Exception ex)
-            {
-                ConsoleService.GetInstance().ShowMessage("Произошла ошибка!", ex.Message);
-                return false;
-            }
-
-            return true;
+            allFilesViewModel?.LoadFilesInBase(files);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

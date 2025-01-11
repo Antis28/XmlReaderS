@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfParser", "WpfParser\WpfP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConverterCod", "ConverterCod\ConverterCod.csproj", "{D822381D-B505-4935-9FF3-EA7E3436B63E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{67CFBA37-FE0A-4F39-B615-AC2A08B46771}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D822381D-B505-4935-9FF3-EA7E3436B63E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D822381D-B505-4935-9FF3-EA7E3436B63E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D822381D-B505-4935-9FF3-EA7E3436B63E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67CFBA37-FE0A-4F39-B615-AC2A08B46771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CFBA37-FE0A-4F39-B615-AC2A08B46771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67CFBA37-FE0A-4F39-B615-AC2A08B46771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CFBA37-FE0A-4F39-B615-AC2A08B46771}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
