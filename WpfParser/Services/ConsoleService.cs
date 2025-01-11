@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WpfParser.Models;
 
 namespace WpfParser.Services
@@ -42,6 +43,7 @@ namespace WpfParser.Services
                 Description = "Описание ошибки: " + message
             };
             _consoleBoxView.Add(cMessage);
+            MessageBox.Show($"{cMessage.Name}\n{cMessage.Description}", cMessage.Name, MessageBoxButton.OK);
         }
     }
 }
