@@ -400,10 +400,22 @@ namespace WpfParser.ViewModels
         private static string ExtractDckFromName(ResponseFileViewModel file)
         {
             var tempName = file.FileName;
-            var indEnd = tempName.IndexOf("-001-DOC-", StringComparison.InvariantCultureIgnoreCase);
-            tempName = tempName.Remove(indEnd);
+
+            var indEnd = tempName.IndexOf("-DOC-", StringComparison.InvariantCultureIgnoreCase)-4;
+            if (indEnd >= 0)
+                tempName = tempName.Remove(indEnd);
+            else
+            {
+                return tempName;
+            }
+            
             var indStart = tempName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
-            tempName = tempName.Remove(0, indStart + 1);
+            if (indStart >= 0)
+                tempName = tempName.Remove(0, indStart + 1);
+            else
+            {
+                return tempName;
+            }
             return tempName;
         }
 
