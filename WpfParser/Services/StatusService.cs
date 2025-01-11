@@ -13,7 +13,7 @@ namespace WpfParser.Services
 {
     internal static class StatusService
     {
-       
+
         private static ViewModel _status;
 
         public static int FileCounts
@@ -25,8 +25,8 @@ namespace WpfParser.Services
             }
             set
             {
-                var s = (StatusViewModel)_status ;
-                s.FileCounts = $"Загружено файлов: {value}";
+                var s = (StatusViewModel)_status;
+                s.FileCounts = value == 0 ? "Нет загруженных файлов." : $"Загружено файлов: {value}";
             }
         }
 

@@ -407,6 +407,7 @@ namespace WpfParser.ViewModels
         {
             ResponseFiles = new ObservableCollection<ResponseFileViewModel>();
             CheckVisibleFileName();
+            StatusService.FileCounts = 0;
         }
         #endregion
 
@@ -436,9 +437,6 @@ namespace WpfParser.ViewModels
 
         public AllFilesViewModel()
         {
-           
-
-
             #region Команды
 
             OnlyDckCommand =
