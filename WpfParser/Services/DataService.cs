@@ -124,7 +124,7 @@ namespace WpfParser.Services
                 }
                 catch (Exception ex)
                 {
-                    ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла {xmlFile}", ex.Message);
+                    ConsoleService.GetInstance().ShowMessage($"Ошибка при чтении файла:\n {xmlFile}", ex.Message);
                 }
 
             }
