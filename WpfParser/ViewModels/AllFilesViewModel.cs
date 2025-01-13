@@ -47,7 +47,6 @@ namespace WpfParser.ViewModels
         #endregion
 
 
-
         #region ResponseFiles : IEnumerable<ResponseFileViewModel> - файлы xml
         ///<summary>Выбранный файл xml</summary>
         private IEnumerable<ResponseFileViewModel> _responseFiles;
@@ -170,7 +169,7 @@ namespace WpfParser.ViewModels
 
         private void OnPersonFiltered(object sender, FilterEventArgs e)
         {
-            if (!(e.Item is ReportToRecipientViewModel report))
+            if (!(e.Item is ReportToRecipientModel report))
             {
                 e.Accepted = false;
                 return;

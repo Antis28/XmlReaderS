@@ -8,7 +8,7 @@
     <ProjectGuid>{430F173D-8CB9-4E88-8810-8A5F2F154A95}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>WpfParser</RootNamespace>
-    <AssemblyName>WpfParser</AssemblyName>
+    <AssemblyName>Парсер XML</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -94,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Payment.cs" />
-    <Compile Include="ViewModels\ReportToRecipientViewModel.cs" />
+    <Compile Include="Models\ReportToRecipientModel.cs" />
     <Compile Include="ViewModels\ResponseFileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -22,7 +22,7 @@
         <vm:AllFilesViewModel x:Key="AllXmlFiles"/>
         <vm:ConsoleViewModel x:Key="ConsoleBoxView"/>
         <vm:StatusViewModel x:Key="StatusViewModel"/>
-        <vm:ReportToRecipientViewModel x:Key="ReportToRecipientViewModel"/>
+        <vm:ReportToRecipientModel x:Key="ReportToRecipientViewModel"/>
 
 
     </Window.Resources>
@@ -294,19 +294,19 @@
 
                                         <DataGridTemplateColumn Header="СНИЛС">
                                             <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientModel}">
                                                     <TextBlock Text="{Binding Snils}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                             <DataGridTemplateColumn.CellEditingTemplate>
-                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientModel}">
                                                     <TextBox Text="{Binding Snils}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellEditingTemplate>
                                         </DataGridTemplateColumn>
                                         <DataGridTemplateColumn Header="Период">
                                             <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientModel}">
                                                     <TextBlock>
                                                         <Run Text="{Binding Payment.StartDateOfPeriod}"/>
                                                         <Run Text="-"/>
@@ -317,7 +317,7 @@
                                         </DataGridTemplateColumn>
                                         <DataGridTemplateColumn Header="Счет" Width="Auto">
                                             <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientViewModel}">
+                                                <DataTemplate DataType="{x:Type vm:ReportToRecipientModel}">
                                                     <TextBox Text="{Binding Payment.AccountNumber}"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>

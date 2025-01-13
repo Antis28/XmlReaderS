@@ -12,7 +12,7 @@ namespace WpfParser.ViewModels
     /// <summary>
     /// Отчет По Получателю
     /// </summary>
-    internal class ReportToRecipientViewModel : ViewModel
+    internal class ReportToRecipientModel 
     {
         /// <summary>
         /// Код района

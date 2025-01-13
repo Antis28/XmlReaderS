@@ -48,7 +48,7 @@ namespace WpfParser.ViewModels
 
 
 
-        public IList<ReportToRecipientViewModel> ReportToRecipient { get; set; }
+        public IList<ReportToRecipientModel> ReportToRecipient { get; set; }
         
     }
 }
