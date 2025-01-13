@@ -104,6 +104,8 @@ namespace WpfParser.Services
             if (reader.NodeType == XmlNodeType.Element && reader.Name == "КодНевозврата")
             {
                 file.ReportToRecipient[numberRecipient].CodeNoReturn = reader.ReadElementContentAsString();
+                file.ReportToRecipient[numberRecipient].CodeNoReturnTip =
+                    CodeToTip(file.ReportToRecipient[numberRecipient].CodeNoReturn);
             }
 
             if (reader.NodeType == XmlNodeType.Element && reader.Name == "ДатаНачалаПериода")
@@ -120,6 +122,38 @@ namespace WpfParser.Services
             }
 
             return numberRecipient;
+        }
+        /// <summary>
+        /// Расшифровка кода не возврата
+        /// </summary>
+        /// <param name="codeNoReturn"></param>
+        /// <returns></returns>
+        private static string CodeToTip(string codeNoReturn)
+        {
+            switch (codeNoReturn)
+            {
+                case "НВ1": return "Не возврат сумм - средства возвращены ранее";
+                case "НВ2": return "Не возврат мм - средства перечислены на счет получателя, в том числе по его\r\nдлительному поручению";
+                case "НВ3": return "Не возврат сумм - средства переведены на имя другого лица, в том числе по длительному поручению получателя";
+                case "НВ4": return "Не возврат сумм - средства перечислены в пользу организации";
+                case "НВ5": return "Не возврат сумм - нарушены условия по вкладу";
+                case "НВ6": return "Не возврат сумм - невозможно идентифицировать лицо, \r\nсовершившее расходную операцию по счёту банковской карты";
+                case "НВ7": return "Не возврат сумм - получение средств наследником";
+                case "НВ8": return "Не возврат сумм - получение средств доверенным лицом";
+                case "НВ9": return "Не возврат сумм - пенсия за указанный период не зачислялась";
+                case "НВ10": return "Не возврат сумм — неверно указан период возврата";
+                case "НВ11": return "Не возврат сумм - неверно указан номер счёта";
+                case "НВ12": return "Не возврат сумм - неверно указана сумма пенсии за указанный период";
+                case "НВ14": return "Не возврат сумм - банкротство владельца счета";
+                case "НВ15": return "Не возврат сумм - неверно указаны ФИО получателя/наименование организации, открывшей номинальный счет";
+                case "НВ17": return "Не возврат сумм - счёт получателя закрыт";
+                case "НВ18": return "Не возврат сумм - на счёт наложен арест";
+                case "НВ19": return "Не возврат сумм - средства перечислены \r\nв адрес исполнительных органов";
+                case "НВ20": return "Средства перечислены в счёт погашения ссудной задолженности";
+                case "НВ21": return "Не возврат сумм - получение средств владельцем счета";
+                case "НВ22": return "Резерв";
+                default:    return "Код не найден";
+            }
         }
 
         public static IEnumerable<ResponseFileViewModel> ReadResponseFiles()

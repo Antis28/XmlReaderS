@@ -289,7 +289,7 @@
                                         <DataGridTextColumn  Header="Код невозврата"  Binding="{Binding CodeNoReturn}"  Width="Auto"  IsReadOnly="False">
                                             <DataGridTextColumn.CellStyle>
                                                 <Style TargetType="DataGridCell">
-                                                    <Setter Property="ToolTip" Value="Test" />
+                                                    <Setter Property="ToolTip" Value="{Binding CodeNoReturnTip}" />
                                                 </Style>
                                             </DataGridTextColumn.CellStyle>
                                         </DataGridTextColumn>

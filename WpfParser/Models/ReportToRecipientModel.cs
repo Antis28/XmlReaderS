@@ -33,7 +33,12 @@ namespace WpfParser.ViewModels
         /// КодНевозврата
         /// </summary>
         public string CodeNoReturn { get; set; }
-        
+
+        /// <summary>
+        /// Расшифровка кода
+        /// </summary>
+        public string CodeNoReturnTip { get; set; }
+
         /// <summary>
         /// ДатаСмерти
         /// </summary>
