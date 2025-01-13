@@ -109,8 +109,8 @@ namespace WpfParser.ViewModels
                     e.Accepted = false;
                     return;
                 }
-                
-                var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
+
+                var expr1 = ContainsSurname(report.Surname, filterText); ;
                 var expr2 = ContainsCodeNoreturn(report.CodeNoReturn, filterText);
                 // Искать в Dck
                 var expr3 = response.Dck != null && filterText.Length > 3 && response.Dck.ToLower().Contains(filterText.ToLower());
@@ -183,7 +183,7 @@ namespace WpfParser.ViewModels
                 return;
             }
             // Искать по фамилии
-            var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
+            var expr1 = ContainsSurname(report.Surname, filterText);
             // Искать по коду возврата
             var expr2 = ContainsCodeNoreturn(report.CodeNoReturn, filterText);
             int integer;
@@ -195,11 +195,18 @@ namespace WpfParser.ViewModels
             e.Accepted = false;
         }
 
+        private static bool ContainsSurname(string Surname, string filterText)
+        {
+            return filterText.Length > 3 && Surname.ToLower().Contains(filterText.ToLower());
+        }
+
         private static bool ContainsCodeNoreturn(string codeNoReturn, string filterText)
         {
-            return codeNoReturn != null 
-                   && codeNoReturn.ToLower().Contains(filterText.ToLower()) 
-                   && codeNoReturn.Length == filterText.Length;
+            var b = codeNoReturn != null
+                    && codeNoReturn.Length == filterText.Length
+                    && codeNoReturn.ToLower().Contains(filterText.ToLower())
+                ;
+            return b;
         }
 
         #endregion
