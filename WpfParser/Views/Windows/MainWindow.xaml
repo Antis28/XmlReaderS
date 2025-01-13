@@ -286,7 +286,13 @@
                                           AlternatingRowBackground="LightGray"
                                 >
                                     <DataGrid.Columns >
-                                        <DataGridTextColumn Header="Код невозврата" Binding="{Binding CodeNoReturn}"  Width="Auto"  IsReadOnly="False"/>
+                                        <DataGridTextColumn  Header="Код невозврата"  Binding="{Binding CodeNoReturn}"  Width="Auto"  IsReadOnly="False">
+                                            <DataGridTextColumn.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="ToolTip" Value="Test" />
+                                                </Style>
+                                            </DataGridTextColumn.CellStyle>
+                                        </DataGridTextColumn>
                                         <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"  Width="Auto"  IsReadOnly="True"/>
                                         <DataGridTextColumn  Header="Имя" Binding="{Binding NamePerson, FallbackValue=Name}" IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True"/>
