@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -46,6 +47,16 @@ namespace WpfParser.ViewModels
         #endregion
         #endregion
 
+        #region FileFoundCounts : string - Количество найденных файлов при фильтрации
+        ///<summary>Количество найденных файлов</summary>
+        private string _fileFoundCounts;
+        ///<summary>Количество найденных файлов</summary>
+        public string FileFoundCounts
+        {
+            get => _fileFoundCounts;
+            set => Set(ref _fileFoundCounts, value);
+        }
+        #endregion
 
         #region ResponseFiles : IEnumerable<ResponseFileViewModel> - файлы xml
         ///<summary>Выбранный файл xml</summary>
@@ -85,7 +96,13 @@ namespace WpfParser.ViewModels
             {
                 if (!Set(ref _filesFilterText, value)) return;
 
+                
+               
+               
                 _fileXmlCollection?.View?.Refresh();
+                var test = (IEnumerable)_fileXmlCollection?.View;
+                if (test != null)
+                    FileFoundCounts = $"Отображается: {test.Cast<object>().Count()} файл(а/ов).";
             }
         }
 
@@ -189,7 +206,7 @@ namespace WpfParser.ViewModels
             int integer;
             var b = int.TryParse(filterText, out integer);
             if (b) return;
-            
+
             if (expr1 || expr2) return;
 
             e.Accepted = false;
@@ -363,14 +380,14 @@ namespace WpfParser.ViewModels
         {
             var tempName = file.FileName;
 
-            var indEnd = tempName.IndexOf("-DOC-", StringComparison.InvariantCultureIgnoreCase)-4;
+            var indEnd = tempName.IndexOf("-DOC-", StringComparison.InvariantCultureIgnoreCase) - 4;
             if (indEnd >= 0)
                 tempName = tempName.Remove(indEnd);
             else
             {
                 return tempName;
             }
-            
+
             var indStart = tempName.IndexOf("-DCK-", StringComparison.InvariantCultureIgnoreCase);
             if (indStart >= 0)
                 tempName = tempName.Remove(0, indStart + 1);
@@ -426,14 +443,14 @@ namespace WpfParser.ViewModels
         #endregion
 
 
-        
+
         public bool LoadFilesInBase(string[] addedElements)
         {
             if (addedElements == null) return false;
             try
             {
                 List<string> fileNames = new List<string>();
-                
+
                 foreach (string fileName in addedElements)
                 {
                     var isDirectory = fileName.IsDirectory();
@@ -450,11 +467,11 @@ namespace WpfParser.ViewModels
                         fileNames.Add(fileName);
                     }
                 }
-                
+
                 var rf = DataService.ReadResponseFiles(fileNames.ToArray());
 
                 var coll = new ObservableCollection<ResponseFileViewModel>();
-                
+
                 foreach (var item in ResponseFiles)
                 {
                     coll.Add(item);
@@ -520,7 +537,6 @@ namespace WpfParser.ViewModels
 
             _selectedXmlFileCollection.Filter += OnPersonFiltered;
             _fileXmlCollection.Filter += OnPersonFilterAllFiles;
-
             
         }
     }

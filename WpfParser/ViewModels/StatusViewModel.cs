@@ -22,6 +22,17 @@ namespace WpfParser.ViewModels
         }
         #endregion
 
+        #region FileFoundCounts : string - Количество найденных файлов
+        ///<summary>Количество найденных файлов</summary>
+        private string _fileFoundCounts;
+        ///<summary>Количество найденных файлов</summary>
+        public string FileFoundCounts
+        {
+            get => _fileFoundCounts;
+            set => Set(ref _fileFoundCounts, value);
+        }
+        #endregion
+
         #region UploadProgress : int - Upload Progress
         ///<summary>Upload Progress</summary>
         public int UploadProgress

@@ -74,6 +74,13 @@
                                MinWidth="150" MaxWidth="350"
                                Margin="2"/>
                 </StatusBarItem>
+                <StatusBarItem >
+                    <TextBlock d:DataContext="{StaticResource AllXmlFiles}" 
+                               DataContext="{StaticResource AllXmlFiles}"  
+                               Text="{Binding FileFoundCounts}" 
+                               MinWidth="150" MaxWidth="350"
+                               Margin="2"/>
+                </StatusBarItem>
             </StatusBar>
             <TabControl>
                 <TabItem Header="Файлы отзывов">
