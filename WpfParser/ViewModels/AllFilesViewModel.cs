@@ -111,7 +111,7 @@ namespace WpfParser.ViewModels
                 }
                 
                 var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
-                var expr2 = report.CodeNoReturn != null && report.CodeNoReturn.ToLower().Contains(filterText.ToLower());
+                var expr2 = ContainsCodeNoreturn(report.CodeNoReturn, filterText);
                 // Искать в Dck
                 var expr3 = response.Dck != null && filterText.Length > 3 && response.Dck.ToLower().Contains(filterText.ToLower());
                 // Искать в районе -008
@@ -185,7 +185,7 @@ namespace WpfParser.ViewModels
             // Искать по фамилии
             var expr1 = report.Surname.ToLower().Contains(filterText.ToLower());
             // Искать по коду возврата
-            var expr2 = report.CodeNoReturn != null && report.CodeNoReturn.ToLower().Contains(filterText.ToLower());
+            var expr2 = ContainsCodeNoreturn(report.CodeNoReturn, filterText);
             int integer;
             var b = int.TryParse(filterText, out integer);
             if (b) return;
@@ -194,6 +194,14 @@ namespace WpfParser.ViewModels
 
             e.Accepted = false;
         }
+
+        private static bool ContainsCodeNoreturn(string codeNoReturn, string filterText)
+        {
+            return codeNoReturn != null 
+                   && codeNoReturn.ToLower().Contains(filterText.ToLower()) 
+                   && codeNoReturn.Length == filterText.Length;
+        }
+
         #endregion
 
 
