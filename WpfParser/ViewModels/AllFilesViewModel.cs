@@ -218,7 +218,7 @@ namespace WpfParser.ViewModels
 
         private static bool ContainsSurname(string Surname, string filterText)
         {
-            return filterText.Length > 3 && Surname.ToLower().Contains(filterText.ToLower());
+            return filterText.Length > 1 && Surname.ToLower().StartsWith(filterText.ToLower());
         }
         private static bool ContainsSnils(string snils, string filterText)
         {
