@@ -228,7 +228,7 @@ namespace WpfParser.ViewModels
             {
                 snils.Replace("-", Empty);
 
-                return filterText.Length > 6 && snils.ToLower().Contains(filterText.ToLower());
+                return filterText.Length > 5 && snils.ToLower().Contains(filterText.ToLower());
             }
             return false;
         }

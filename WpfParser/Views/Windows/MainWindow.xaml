@@ -26,7 +26,9 @@
 
 
     </Window.Resources>
-    <Grid DataContext="{StaticResource AllXmlFiles }">
+    <Grid DataContext="{StaticResource AllXmlFiles }"
+          Drop="SetDropCommand"
+          AllowDrop="True">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Файл">
@@ -284,7 +286,6 @@
                                     </StackPanel>
                                 </DockPanel>
                                 <DataGrid ItemsSource="{Binding SelectedXmlFileCollection}" 
-                                          
                                           AutoGenerateColumns="False" 
                                           CanUserAddRows="False"
                                           CanUserSortColumns ="true"
@@ -293,6 +294,7 @@
                                           GridLinesVisibility="Vertical"
                                           VerticalGridLinesBrush="DarkGray"
                                           AlternatingRowBackground="LightGray"
+                                          
                                 >
                                     <DataGrid.Columns >
                                         <DataGridTextColumn  Header="Код невозврата"  Binding="{Binding CodeNoReturn}"  Width="Auto"  IsReadOnly="False">
