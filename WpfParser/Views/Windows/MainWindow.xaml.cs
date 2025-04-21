@@ -51,6 +51,8 @@ namespace WpfParser
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             var allFilesViewModel = fileListBox.DataContext as AllFilesViewModel;
+
+            // Загрузка Drag&Drop
             allFilesViewModel?.LoadFilesInBase(files);
         }
 

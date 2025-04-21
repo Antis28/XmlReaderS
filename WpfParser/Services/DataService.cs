@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Helpers;
 using WpfParser.Models;
 using WpfParser.ViewModels;
 
@@ -162,8 +163,35 @@ namespace WpfParser.Services
             return ReadResponseFiles(fileNames);
         }
 
-        public static IEnumerable<ResponseFileViewModel> ReadResponseFiles(string[] fileNames)
+        private static string[] FilterXmName(string[] addedElements)
         {
+            List<string> fileNames = new List<string>();
+
+            foreach (string fileName in addedElements)
+            {
+                var isDirectory = fileName.IsDirectory();
+                var isXmlFile = Path.GetExtension(fileName).ToLower() == ".xml";
+                if (isDirectory)
+                {
+                    // Переданный элемент является каталогом
+                    var files = Directory.GetFiles(fileName, "*.xml", SearchOption.AllDirectories);
+                    fileNames.AddRange(files);
+                }
+                else
+                {
+                    // Переданный элемент является файлом
+                    fileNames.Add(fileName);
+                }
+            }
+
+            return fileNames.ToArray();
+        }
+
+        public static IEnumerable<ResponseFileViewModel> ReadResponseFiles(string[] addedElements)
+        {
+            var fileNames = FilterXmName(addedElements);
+
+
             var progressLoading = 0;
             var oldProgress = 0;
             var currentPosition = 0;

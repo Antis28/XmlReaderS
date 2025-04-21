@@ -78,7 +78,7 @@ namespace WpfParser.ViewModels
     {
         private readonly FileInfo _fileInfo;
 
-        public string Name => _fileInfo.Name;
+        public new string Name => _fileInfo.Name;
         public string Path => _fileInfo.FullName;
         public DateTime CreationDate => _fileInfo.CreationTime;
 

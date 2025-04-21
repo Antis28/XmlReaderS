@@ -16,6 +16,8 @@ using Helpers;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Reflection;
+using static System.String;
+using static System.Net.WebRequestMethods;
 
 namespace WpfParser.ViewModels
 {
@@ -96,9 +98,6 @@ namespace WpfParser.ViewModels
             {
                 if (!Set(ref _filesFilterText, value)) return;
 
-                
-               
-               
                 _fileXmlCollection?.View?.Refresh();
                 var test = (IEnumerable)_fileXmlCollection?.View;
                 if (test != null)
@@ -115,7 +114,7 @@ namespace WpfParser.ViewModels
             }
 
             var filterText = _filesFilterText;
-            if (string.IsNullOrEmpty(filterText)) return;
+            if (IsNullOrEmpty(filterText)) return;
 
 
             var reports = response.ReportToRecipient;
@@ -127,14 +126,17 @@ namespace WpfParser.ViewModels
                     return;
                 }
 
-                var expr1 = ContainsSurname(report.Surname, filterText); ;
+                var expr1 = ContainsSurname(report.Surname, filterText);
+
                 var expr2 = ContainsCodeNoreturn(report.CodeNoReturn, filterText);
                 // Искать в Dck
                 var expr3 = response.Dck != null && filterText.Length > 3 && response.Dck.ToLower().Contains(filterText.ToLower());
                 // Искать в районе -008
                 var expr4 = response.District != null && filterText.Length == 3 && response.District.ToLower().Contains(filterText.ToLower());
 
-                if (expr1 || expr2 || expr3 || expr4) return;
+                var expr5 = ContainsSnils(report.Snils, filterText);
+
+                if (expr1 || expr2 || expr3 || expr4 || expr5) return;
             }
             e.Accepted = false;
         }
@@ -192,7 +194,7 @@ namespace WpfParser.ViewModels
                 return;
             }
             var filterText = _personFilterText;
-            if (string.IsNullOrEmpty(filterText)) return;
+            if (IsNullOrEmpty(filterText)) return;
 
             if (report.Surname is null)
             {
@@ -203,11 +205,13 @@ namespace WpfParser.ViewModels
             var expr1 = ContainsSurname(report.Surname, filterText);
             // Искать по коду возврата
             var expr2 = ContainsCodeNoreturn(report.CodeNoReturn, filterText);
+
+            var expr3 = ContainsSnils(report.Snils, filterText);
             int integer;
             var b = int.TryParse(filterText, out integer);
             if (b) return;
 
-            if (expr1 || expr2) return;
+            if (expr1 || expr2 || expr3) return;
 
             e.Accepted = false;
         }
@@ -215,6 +219,18 @@ namespace WpfParser.ViewModels
         private static bool ContainsSurname(string Surname, string filterText)
         {
             return filterText.Length > 3 && Surname.ToLower().Contains(filterText.ToLower());
+        }
+        private static bool ContainsSnils(string snils, string filterText)
+        {
+            int number = 0;
+
+            if (int.TryParse(filterText, out number) || filterText.Contains("-"))
+            {
+                snils.Replace("-", Empty);
+
+                return filterText.Length > 6 && snils.ToLower().Contains(filterText.ToLower());
+            }
+            return false;
         }
 
         private static bool ContainsCodeNoreturn(string codeNoReturn, string filterText)
@@ -267,7 +283,7 @@ namespace WpfParser.ViewModels
 
         private void OnClearPersonFieldCommandExecuted(object p)
         {
-            PersonFilterText = string.Empty;
+            PersonFilterText = Empty;
         }
         #endregion
 
@@ -378,6 +394,7 @@ namespace WpfParser.ViewModels
 
         private static string ExtractDckFromName(ResponseFileViewModel file)
         {
+            try { 
             var tempName = file.FileName;
 
             var indEnd = tempName.IndexOf("-DOC-", StringComparison.InvariantCultureIgnoreCase) - 4;
@@ -396,6 +413,13 @@ namespace WpfParser.ViewModels
                 return tempName;
             }
             return tempName;
+            }
+            catch (Exception e)
+            {
+                return "Error";
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private static string ExtractDisFromName(ResponseFileViewModel file)
@@ -418,8 +442,14 @@ namespace WpfParser.ViewModels
 
         private void OnLoadBaseCommandExecuted(object p)
         {
-            var rf = DataService.ReadResponseFiles();
-            ResponseFiles = new ObservableCollection<ResponseFileViewModel>(rf);
+            // Загрузка кнопкой загрузить всё
+            var fileNames = Directory.GetFiles(Environment.CurrentDirectory, "*.xml", SearchOption.AllDirectories);
+
+            //var files = DataService.ReadResponseFiles();
+
+            LoadFilesInBase(fileNames);
+
+            //ResponseFiles = new ObservableCollection<ResponseFileViewModel>(files);
             CheckVisibleFileName();
         }
         #endregion
@@ -442,33 +472,14 @@ namespace WpfParser.ViewModels
 
         #endregion
 
-
-
+        
+        // Загрузка XML в базу данных
         public bool LoadFilesInBase(string[] addedElements)
         {
             if (addedElements == null) return false;
             try
             {
-                List<string> fileNames = new List<string>();
-
-                foreach (string fileName in addedElements)
-                {
-                    var isDirectory = fileName.IsDirectory();
-                    var isXmlFile = Path.GetExtension(fileName).ToLower() == ".xml";
-                    if (isDirectory)
-                    {
-                        // Переданный элемент является каталогом
-                        var files = Directory.GetFiles(fileName, "*.xml", SearchOption.AllDirectories);
-                        fileNames.AddRange(files);
-                    }
-                    else
-                    {
-                        // Переданный элемент является файлом
-                        fileNames.Add(fileName);
-                    }
-                }
-
-                var rf = DataService.ReadResponseFiles(fileNames.ToArray());
+                var rf = DataService.ReadResponseFiles(addedElements);
 
                 var coll = new ObservableCollection<ResponseFileViewModel>();
 
@@ -495,6 +506,8 @@ namespace WpfParser.ViewModels
 
             return true;
         }
+
+        
 
         private void ScanDckAndDistrict()
         {
@@ -537,7 +550,7 @@ namespace WpfParser.ViewModels
 
             _selectedXmlFileCollection.Filter += OnPersonFiltered;
             _fileXmlCollection.Filter += OnPersonFilterAllFiles;
-            
+
         }
     }
 }

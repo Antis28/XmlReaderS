@@ -31,7 +31,9 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Файл">
                     <MenuItem Header="Открыть файл" Click="OpenFileItemOnClick"></MenuItem>
-                    <MenuItem Header="Загрузить все файлы рядом" Command="{Binding LoadBaseCommand  }" />
+                    <MenuItem Header="Загрузить все файлы рядом"
+                              d:DataContext="{StaticResource AllXmlFiles}"
+                              Command="{Binding LoadBaseCommand  }" />
                     <MenuItem Header="Очистить список" Command="{Binding ClearBaseCommand  }" />
                     <Separator></Separator>
                     <MenuItem Header="Выход" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
@@ -193,12 +195,12 @@
                                             KeyUp="TextBox_KeyUp">
                                             <TextBox.ToolTip>
                                                 <StackPanel>
-                                                    <TextBlock Text="Искать по всем файлам и по списку"/>
-                                                    <TextBlock Text="008   -> 8-й район(3 цифры)"/>
-                                                    <TextBlock Text="00025 -> DCK(больше 3-х цифр)"/>
-                                                    <TextBlock Text="НВ17  -> код невозврата(НВ)"/>
-                                                    <TextBlock Text="Иванов -> фамилия"/>
-                                                    
+                                                    <TextBlock Text="Искать по всем файлам и по списку" Style="{StaticResource TipsTextHeader}"/>
+                                                    <TextBlock Text="008   -> 8-й район(3 цифры)" Style="{StaticResource TipsText}"/>
+                                                    <TextBlock Text="00025 -> DCK(больше 3-х цифр)" Style="{StaticResource TipsText}"/>
+                                                    <TextBlock Text="НВ17  -> код не возврата(НВ)" Style="{StaticResource TipsText}"/>
+                                                    <TextBlock Text="Иванов -> фамилия(больше 4-х знаков)" Style="{StaticResource TipsText}"/>
+                                                    <TextBlock Text="000-000 -> СНИЛС(больше 5-ти цифр)" Style="{StaticResource TipsText}"/>
                                                 </StackPanel>
                                             </TextBox.ToolTip>
                                         </TextBox>
